@@ -1,5 +1,5 @@
 import Mapbox from './Mapbox'
-import stations from 'json!files/stations.json'
+import StationData from '!json!files/stations.json'
 
 export default class Map{
 
@@ -8,18 +8,20 @@ export default class Map{
         this.L = Mapbox()
 
         // instantiate map
-        this.L.mapbox.map('map', 'piratefsh.nknilk08')
+        this.instance = this.L.mapbox.map('map', 'piratefsh.nknilk08')
 
-        // this.addStations()
+        this.addStations()
     }
 
-    addMarker() {
-
+    addMarker(label, coords) {
+        if (coords && coords.lat && coords.lng){
+            const marker = this.L.marker([coords.lat, coords.lng]).addTo(this.instance)
+        }
     }
 
     addStations() {
-        const stations = stations.stations 
-        stations.forEach(s => console.log(s))
+        const stations = StationData.stations 
+        stations.forEach(s => this.addMarker(s.unit, s.coords))
     }
 
 }
