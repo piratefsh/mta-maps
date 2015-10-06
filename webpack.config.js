@@ -1,4 +1,5 @@
 var path = require('path'),
+    webpack = require('webpack'),
     ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
@@ -10,6 +11,7 @@ module.exports = {
         publicPath: '/',
         filename: 'bundle.js'
     },
+    devtool: 'eval',
     module: {
         loaders: [
             // Babel loader
@@ -27,6 +29,14 @@ module.exports = {
             {
                 test: /\.(sass|scss)$/,
                 loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
+            },
+            {
+                test: /\.json$/,
+                loader: 'json'
+            },
+            {
+                test: /\.jpe?g$|\.gif$|\.png$/i, 
+                loader: 'file'
             }
         ]
     },
