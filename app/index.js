@@ -1,6 +1,6 @@
 import test from './test'
-import map from './components/Map'
+import Map from './components/Map'
 import 'styles/style.scss' 
 
 
-map()
+let map = new Map()
