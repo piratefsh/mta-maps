@@ -28,12 +28,15 @@ export default class Map{
         const manhattanLatLng = [40.76702162667872, -73.98193359375]
         const zoomLevel = 12
         this.instance.setView(manhattanLatLng, zoomLevel)
+
+        // when to show labels by default
+        this.zoomThresholdForLabel = 12
     }
 
     setCallbacks(){
         this.instance.on('zoomend', () => {
             const layer = this.layers['station_names']
-            if(this.instance.getZoom() > 12){
+            if(this.instance.getZoom() > this.zoomThresholdForLabel){
                 // make all labels noHide = true
                 // i.e. always show labe;
                 this.showMarkerLabel(true)
