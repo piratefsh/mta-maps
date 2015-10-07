@@ -6,15 +6,17 @@ export default class MapControls{
         this.instance = this.map.instance
     }
 
-    showLine(l){
+    showLines(lines){
         this.map.eachLineLayer((linename,layer) => {
             this.instance.removeLayer(layer)
         })
 
         this.map.eachLineLayer((linename,layer) => {
-            if(linename.indexOf(l) > -1){
-                layer.addTo(this.instance)
-            }
+            lines.forEach(l => {
+                if(linename.indexOf(l) > -1){
+                    layer.addTo(this.instance)
+                }
+            })
         })
     }
 }

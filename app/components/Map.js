@@ -135,9 +135,9 @@ export default class Map{
 
         this.eachLineLayer((ln, l) => l.addTo(this.instance))
 
-        this._printLines()
     }
 
+    // debug tools
     _printLines(){
         this.eachLineLayer((ln, l) => {
             const station = []

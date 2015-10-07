@@ -11,11 +11,21 @@ let mapControls = new MapControls(map)
 const sl = new SubwayLines()
 let subwayLines = sl.getAllIcons()
 let subwayListElem = document.querySelector('#subway-lines')
-    subwayListElem.innerHTML = subwayLines
-        .map((s,i) => `<fieldset>\
-            <input type='checkbox' id='subway-line-${i}' class='control-subway-line'/>\
-            <label for='subway-line-${i}' >${s}</label></fieldset>`).join('')
+const controls = subwayLines.map((s,i) => {
+    const fs = document.createElement('fieldset')
+    const cb = document.createElement('input')
+    cb.setAttribute('type', 'checkbox')
+    cb.setAttribute('id', `subway-line-${i}`)
+    cb.setAttribute('class', 'control-subway-line')
 
-const controls = document.querySelector('#subway-lines .control-subway-line')
+    const lbl = document.createElement('label')
+    lbl.innerHTML = `${s}`
+    lbl.setAttribute('for', `subway-line-${i}`)
+    fs.appendChild(cb)
+    fs.appendChild(lbl)
 
-mapControls.showLine('G')
+    subwayListElem.appendChild(fs)
+})
+
+// const controls = document.querySelector('#subway-lines .control-subway-line')
+// mapControls.showLines(['A', 'G'])
