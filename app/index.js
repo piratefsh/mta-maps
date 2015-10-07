@@ -18,4 +18,4 @@ let subwayListElem = document.querySelector('#subway-lines')
 
 const controls = document.querySelector('#subway-lines .control-subway-line')
 
-mapControls.showLine('A')
+mapControls.showLine('G')

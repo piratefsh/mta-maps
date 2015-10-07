@@ -14,8 +14,7 @@ export default class Map{
         
         // layers and markers
         this.layers = {
-            'markers': null,
-            'station_names': null
+            'lines': {},
         }
 
         this.markers = []
@@ -35,7 +34,6 @@ export default class Map{
 
     setCallbacks(){
         this.instance.on('zoomend', () => {
-            const layer = this.layers['station_names']
             if(this.instance.getZoom() > this.zoomThresholdForLabel){
                 // make all labels noHide = true
                 // i.e. always show labe;
@@ -49,10 +47,18 @@ export default class Map{
     }
 
     showMarkerLabel(val){
-        // negate to get value for noHide
-        this.layers.markers.eachLayer(l => {
-            l.setLabelNoHide(val)
+        this.eachLineLayer((linename, l) => {
+            l.eachLayer(m => m.setLabelNoHide(val))
         })
+    }
+
+    // for each layer in this
+    eachLineLayer(f){
+        const lines = this.layers['lines']
+        for (let linename in lines){
+            const layer = lines[linename]
+            f(linename, layer)
+        }
     }
 
     createPopUp(latlng, content){
@@ -93,7 +99,7 @@ export default class Map{
         }
     }
 
-    addStationMarker(s){
+    createStationMarker(s){
         if(s.coords && s.coords.lat && s.coords.lng){
             const latlng = [s.coords.lat, s.coords.lng]
             const lines = this.lineToIcons(s.line_name)
@@ -105,17 +111,39 @@ export default class Map{
             const marker = this.createCircleMarker(station_name, latlng, 
                 s.color, popup)
             marker.lineName = s.line_name
-            this.markers.push(marker)
+            return marker
         }
     }
 
     addAllStationMarkers() {
         const stations = StationData.stations 
-        stations.forEach(s => this.addStationMarker(s))
-        
-        const markerLayer = this.L.featureGroup(this.markers)
-        this.layers['markers'] = markerLayer
-        markerLayer.addTo(this.instance)
+        const markers = stations.map(s => this.createStationMarker(s))
+        // for each marker, add to layer for their line
+        markers.forEach(m => {
+            if (m == null) return 
+
+            const lines = m.lineName.split("")
+            lines.forEach(l => {
+                if (l in this.layers['lines']){
+                    this.layers['lines'][l].addLayer(m)
+                }
+                else{
+                    this.layers['lines'][l] = this.L.featureGroup([m])
+                }
+            })
+        })
+
+        this.eachLineLayer((ln, l) => l.addTo(this.instance))
+
+        this._printLines()
+    }
+
+    _printLines(){
+        this.eachLineLayer((ln, l) => {
+            const station = []
+            l.eachLayer(m => station.push(m.options.title))
+            console.log(ln, station)
+        })
     }
 
 }
