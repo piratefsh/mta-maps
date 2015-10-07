@@ -1,28 +1,34 @@
 import LineColors from '!json!files/line_colors.json'
+import LineColorsGrouped from '!json!files/line_colors_grouped.json'
 
 export default class SubwayLines{
 
     constructor(){
         this.colors = LineColors.colors
+        this.lines = LineColorsGrouped.colors
     }
 
+    format(c, l){
+        return `<span class="line-icon" style='background-color:${c}'>${l}</span>`
+    }
+    
     getIcon(singleLine){
         const l = singleLine
         const c = this.colors[l]
-        return `<span class="line-icon" style='background-color:${c}'>${l}</span>`
+        return this.format(c, l)
     }
 
     getAllIcons(){
-        const colors = Object.keys(this.colors)
-        // const sortedColors = colors.sort((a,b) => {
-        //     const ca = this.colors[a]
-        //     const cb = this.colors[b]
-        //     if(ca < cb) return -1
-        //     else if(ca > cb) return 1
-        //     else return 0
-        // })
-        const icons = colors.map(c => this.getIcon(c))
-        return icons
+        const lines = []
+        const sortedKeys = Object.keys(this.lines).sort()
+        for (let key of sortedKeys){
+            const indivLines = key.split("")
+            const c = this.lines[key]
+            const icons = indivLines.map(l => this.format(c, l))
+            const line = `<div>${icons.join('')}</div>`
+            lines.push(line)
+        }
+        return lines
     }
 
 
