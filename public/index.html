@@ -5,7 +5,18 @@
     <link rel='stylesheet' href='/styles.css'/>
 </head>
 <body>
-    <div id='map' class='map'></div>
+    <div class="row row-container">
+        <div class="col-sm-3 col-sidebar">
+            <div class='sidebar'>
+                <h2 class='title'>MTA Stations</h2>
+                <ul id='subway-lines'>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div id='map' class='map'></div>
+        </div>
+    </div>
     <script src="/bundle.js"></script>
 </body>
 </html>

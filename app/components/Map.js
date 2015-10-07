@@ -1,12 +1,13 @@
 import Mapbox from './Mapbox'
 import StationData from '!json!files/stations.json'
-import LineColors from '!json!files/line_colors.json'
+import SubwayLines from './SubwayLines'
 
 export default class Map{
 
     constructor() {
         // get leaflet L object
         this.L = Mapbox()
+        this.subwayLines = new SubwayLines()
 
         // instantiate map
         this.instance = this.L.mapbox.map('map', 'piratefsh.nknilk08')
@@ -60,8 +61,7 @@ export default class Map{
 
     lineToIcons(linename){
         const lines = linename.split("")
-        const colors = LineColors.colors
-        const icons = lines.map(l => `<span class="line-icon" style='background-color:${colors[l]}'>${l}</span>`)
+        const icons = lines.map(l => this.subwayLines.getIcon(l))
         return icons.join('')
     }
 

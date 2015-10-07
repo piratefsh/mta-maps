@@ -8,28 +8,33 @@
         font-weight: bold
         display: block 
         margin-bottom: 4px
-    .line-icon
-        $size: 20px
-        border-radius: 50%
-        width: $size
-        height: $size
-        display: inline-block
-        font-size: 0.9em
-        font-weight: bold
-        text-align: center
-        color: white
-        margin-right: 4px
-        margin-bottom: 4px
-.station-name
-    $stroke-color: #333333
-    $stroke-width: 1px
-    background: none
-    color: #eeeeee
+
+// round line alphanum icons
+.line-icon
+    $size: 20px
+    border-radius: 50%
+    width: $size
+    height: $size
     display: inline-block
-    font-size: 1em
-    font-weight: normal
-    line-height: 1em
-    text-shadow: 1px 1px 1px $stroke-color, 1px 1px 1px $stroke-color
+    font-size: 0.9em
+    font-weight: bold
+    text-align: center
+    color: white
+    margin-right: 4px
+    margin-bottom: 4px
+
+// labels
+.leaflet-label
+    &.station-name
+        $stroke-color: #333333
+        $stroke-width: 1px
+        background: none
+        color: #eeeeee
+        display: inline-block
+        font-size: 1em
+        font-weight: normal
+        line-height: 1em
+        text-shadow: 1px 1px 1px $stroke-color, 1px 1px 1px $stroke-color
 
 // overwrite leaflet styles
 .leaflet-label
