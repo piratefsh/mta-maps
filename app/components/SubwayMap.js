@@ -2,7 +2,7 @@ import Mapbox from './Mapbox'
 import StationData from '!json!files/stations.json'
 import SubwayLines from './SubwayLines'
 
-export default class Map{
+export default class SubwayMap{
 
     constructor() {
         // get leaflet L object
