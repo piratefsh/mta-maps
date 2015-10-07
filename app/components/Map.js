@@ -12,10 +12,33 @@ export default class Map{
         this.instance = this.L.mapbox.map('map', 'piratefsh.nknilk08')
         
         // layers and markers
-        this.layers = {}
-        this.markers = []
+        this.layers = {
+            'markers': null,
+            'station_names': null
+        }
 
+        this.markers = []
+        this.stationNames = []
+
+        this.setCallbacks()
         this.addAllStationMarkers()
+
+        this.instance.setView([40.76702162667872, -73.98193359375], 12)
+
+        // this.instance.setZoom(13)
+    }
+
+    setCallbacks(){
+        this.instance.on('zoomend', () => {
+            const layer = this.layers['station_names']
+            if(this.instance.getZoom() > 12){
+                layer.addTo(this.instance).bringToBack()
+            }
+            else{
+                this.instance.removeLayer(layer)
+                
+            }
+        })
     }
 
     getMarkers(){
@@ -36,7 +59,7 @@ export default class Map{
         return icons.join('')
     }
 
-    addMarker(title, latlng, color, popup) {
+    addCircleMarker(title, latlng, color, popup) {
         if (latlng){
             const marker = this.L.circleMarker(latlng,
                 {
@@ -52,26 +75,47 @@ export default class Map{
         }
     }
 
+    addTextMarker(title, latlng, popup) {
+        const icon = this.L.divIcon({
+            className: 'station-name',
+            html: `${title}` 
+        })
+        const marker = this.L.marker(latlng, {
+            icon: icon
+        })
+        marker.bindPopup(popup)
+        this.stationNames.push(marker)
+    }
+
     addStationMarker(s){
         if(s.coords && s.coords.lat && s.coords.lng){
             const latlng = [s.coords.lat, s.coords.lng]
             const lines = this.lineToIcons(s.line_name)
+
             const popupContent = `<div class='map-popup'><span class='title'>${s.station_name}</span>${lines}</div>`
             const popup = this.createPopUp(latlng, popupContent)
-            this.addMarker(`${s.station_name}`, latlng, 
+
+            const station_name = `${s.station_name}`
+            this.addCircleMarker(station_name, latlng, 
                 s.color, popup)
+
+            this.addTextMarker(station_name, latlng, popup)
         }
     }
 
     addAllStationMarkers() {
         const stations = StationData.stations 
-
         stations.forEach(s => this.addStationMarker(s))
         
-        const markerLayer = this.L.layerGroup(this.getMarkers())
+        const markerLayer = this.L.featureGroup(this.markers)
+        const stationNameLayer = this.L.featureGroup(this.stationNames)
+
         this.layers['markers'] = markerLayer
+        this.layers['station_names'] = stationNameLayer
+
         markerLayer.addTo(this.instance)
-        // this.instance.fitBounds(markerLayer.getBounds())
+        // stationNameLayer.addTo(this.instance)
+        let bounds = markerLayer.getBounds()
     }
 
 }
