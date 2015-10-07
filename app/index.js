@@ -11,21 +11,40 @@ let mapControls = new MapControls(map)
 const sl = new SubwayLines()
 let subwayLines = sl.getAllIcons()
 let subwayListElem = document.querySelector('#subway-lines')
-const controls = subwayLines.map((s,i) => {
-    const fs = document.createElement('fieldset')
-    const cb = document.createElement('input')
-    cb.setAttribute('type', 'checkbox')
-    cb.setAttribute('id', `subway-line-${i}`)
-    cb.setAttribute('class', 'control-subway-line')
 
-    const lbl = document.createElement('label')
-    lbl.innerHTML = `${s}`
-    lbl.setAttribute('for', `subway-line-${i}`)
-    fs.appendChild(cb)
-    fs.appendChild(lbl)
-
+for(let lines in subwayLines){
+    const icons = subwayLines[lines]
+    const fs = createControlFieldset(icons,lines)
     subwayListElem.appendChild(fs)
-})
+}
 
 // const controls = document.querySelector('#subway-lines .control-subway-line')
 // mapControls.showLines(['A', 'G'])
+
+function onSubwayLineControlClick(e){
+    // get all checked
+    let checked = document.querySelectorAll('.control-subway-line:checked')
+    const selectedStations = Array.prototype.map.call(checked, line => line.value)
+    const indivStations = selectedStations.reduce((prev, elem) => {
+        prev.push(...elem.split(""))
+        return prev
+    }, [])
+    mapControls.showLines(indivStations)
+}
+
+function createControlFieldset(icon, line){
+    const fs = document.createElement('fieldset')
+    const cb = document.createElement('input')
+    cb.setAttribute('type', 'checkbox')
+    cb.setAttribute('id', `subway-line-${line}`)
+    cb.setAttribute('class', 'control-subway-line')
+    cb.value = `${line}`
+    cb.onclick = onSubwayLineControlClick
+
+    const lbl = document.createElement('label')
+    lbl.innerHTML = `${icon}`
+    lbl.setAttribute('for', `subway-line-${line}`)
+    fs.appendChild(cb)
+    fs.appendChild(lbl)
+    return fs
+}

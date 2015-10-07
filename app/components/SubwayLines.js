@@ -26,7 +26,7 @@ export default class SubwayLines{
             const c = this.lines[key]
             const icons = indivLines.map(l => this.format(c, l))
             const line = `<div>${icons.join('')}</div>`
-            lines.push(line)
+            lines[key] = line
         }
         return lines
     }
