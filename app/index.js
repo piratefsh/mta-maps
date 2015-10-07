@@ -1,5 +1,6 @@
 import test from './test'
 import SubwayMap from './components/SubwayMap'
+import HeatMap from './components/HeatMap'
 import MapControls from './components/MapControls'
 import SubwayLines from './components/SubwayLines'
 import 'styles/style.scss' 

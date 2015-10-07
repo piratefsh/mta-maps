@@ -1,8 +1,7 @@
-import Map from './Map'
+import SubwayMap from './SubwayMap'
 
-export default class HeatMap{
-    constructor(map){
-        this.map = map
-        this.instance = this.map.instance
+export default class HeatMap extends SubwayMap{
+    constructor(...args){
+        super(...args)
     }
 }
