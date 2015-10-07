@@ -24,8 +24,8 @@ export default class Map{
         this.setCallbacks()
         this.addAllStationMarkers()
 
-        // center view in Manhattan
-        const manhattanLatLng = [40.76702162667872, -73.98193359375]
+        // center view in East River
+        const manhattanLatLng = [40.768033, -73.942108]
         const zoomLevel = 12
         this.instance.setView(manhattanLatLng, zoomLevel)
 
