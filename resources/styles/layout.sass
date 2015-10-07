@@ -2,6 +2,8 @@ $bg-color: #2E2E2E
 $text-color: #eeeeee
 $space : 20px
 
+$sm-width: 768px
+
 .col-sidebar, .row-container 
     background-color: $bg-color 
     color: $text-color
@@ -21,5 +23,8 @@ $space : 20px
             display: block
             margin-right: 4px
             margin-bottom: 4px
+            @media(max-width: $sm-width)
+                display: inline-block
+                margin-right: $space
             label 
                 padding-left: $space/3

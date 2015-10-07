@@ -68,7 +68,7 @@ export default class Map{
         return icons.join('')
     }
 
-    addCircleMarker(title, latlng, color, popup) {
+    createCircleMarker(title, latlng, color, popup) {
         if (latlng){
             const marker = this.L.circleMarker(latlng,
                 {
@@ -88,8 +88,8 @@ export default class Map{
             })
 
             marker.bindPopup(popup)
-
-            this.markers.push(marker)
+            return marker
+            
         }
     }
 
@@ -102,8 +102,10 @@ export default class Map{
             const popup = this.createPopUp(latlng, popupContent)
 
             const station_name = `${s.station_name}`
-            this.addCircleMarker(station_name, latlng, 
+            const marker = this.createCircleMarker(station_name, latlng, 
                 s.color, popup)
+            marker.lineName = s.line_name
+            this.markers.push(marker)
         }
     }
 
