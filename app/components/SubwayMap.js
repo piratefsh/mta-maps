@@ -1,17 +1,18 @@
 import Mapbox from './Mapbox'
+import LMap from 'mapbox.js/src/map.js'
 import StationData from '!json!files/stations.json'
 import SubwayLines from './SubwayLines'
 
-export default class SubwayMap{
+const L = Mapbox()
+
+export default class SubwayMap extends LMap.Map{
 
     constructor() {
+        super('map', 'piratefsh.nknilk08')
         // get leaflet L object
         this.L = Mapbox()
         this.subwayLines = new SubwayLines()
 
-        // instantiate map
-        this.instance = this.L.mapbox.map('map', 'piratefsh.nknilk08')
-        
         // layers and markers
         this.layers = {
             'lines': {},
@@ -26,15 +27,15 @@ export default class SubwayMap{
         // center view in East River
         const manhattanLatLng = [40.768033, -73.942108]
         const zoomLevel = 12
-        this.instance.setView(manhattanLatLng, zoomLevel)
+        this.setView(manhattanLatLng, zoomLevel)
 
         // when to show labels by default
         this.zoomThresholdForLabel = 12
     }
 
     setCallbacks(){
-        this.instance.on('zoomend', () => {
-            if(this.instance.getZoom() > this.zoomThresholdForLabel){
+        this.on('zoomend', () => {
+            if(this.getZoom() > this.zoomThresholdForLabel){
                 // make all labels noHide = true
                 // i.e. always show labe;
                 this.showMarkerLabel(true)
@@ -133,7 +134,7 @@ export default class SubwayMap{
             })
         })
 
-        this.eachLineLayer((ln, l) => l.addTo(this.instance))
+        this.eachLineLayer((ln, l) => l.addTo(this))
 
     }
 
