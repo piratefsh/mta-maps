@@ -1,5 +1,3 @@
-import Map from './Map'
-
 export default class MapControls{
     constructor(map){
         this.map = map 

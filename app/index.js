@@ -1,11 +1,11 @@
 import test from './test'
-import Map from './components/Map'
+import SubwayMap from './components/Map'
 import MapControls from './components/MapControls'
 import SubwayLines from './components/SubwayLines'
 import 'styles/style.scss' 
 
 // init map
-let map = new Map()
+let map = new SubwayMap()
 let mapControls = new MapControls(map)
 
 // init subway line controls
