@@ -4,23 +4,27 @@ import MapControls from './components/MapControls'
 import SubwayLines from './components/SubwayLines'
 import 'styles/style.scss' 
 
-// init map
-let map = new SubwayMap()
-let mapControls = new MapControls(map)
+let map, mapControls
 
-// init subway line controls
-const sl = new SubwayLines()
-let subwayLines = sl.getAllIcons()
-let subwayListElem = document.querySelector('#subway-lines')
+function init(){
+    // init map and controls
+    map = new SubwayMap()
+    mapControls = new MapControls(map)
 
-for(let lines in subwayLines){
-    const icons = subwayLines[lines]
-    const fs = createControlFieldset(icons,lines)
-    subwayListElem.appendChild(fs)
+    // init subway line controls
+    const sl = new SubwayLines()
+    let subwayLines = sl.getAllIcons()
+    let subwayListElem = document.querySelector('#subway-lines')
+
+    for(let lines in subwayLines){
+        const icons = subwayLines[lines]
+        const fs = createControlFieldset(icons,lines)
+        subwayListElem.appendChild(fs)
+    }
+
+    // init batch controls
+    initSubwayLineControlBatch(true)
 }
-
-// init batch controls
-initSubwayLineControlBatch(true)
 
 function initSubwayLineControlBatch(selectAll){
     const controls = document.querySelectorAll('.control-subway-line-batch')
@@ -87,3 +91,5 @@ function createControlFieldset(icon, line){
     fs.appendChild(lbl)
     return fs
 }
+
+init()
