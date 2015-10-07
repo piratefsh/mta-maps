@@ -23,26 +23,32 @@ export default class Map{
         this.setCallbacks()
         this.addAllStationMarkers()
 
-        this.instance.setView([40.76702162667872, -73.98193359375], 12)
-
-        // this.instance.setZoom(13)
+        // center view in Manhattan
+        const manhattanLatLng = [40.76702162667872, -73.98193359375]
+        const zoomLevel = 12
+        this.instance.setView(manhattanLatLng, zoomLevel)
     }
 
     setCallbacks(){
         this.instance.on('zoomend', () => {
             const layer = this.layers['station_names']
             if(this.instance.getZoom() > 12){
-                layer.addTo(this.instance).bringToBack()
+                // make all labels noHide = true
+                // i.e. always show labe;
+                this.showMarkerLabel(true)
             }
             else{
-                this.instance.removeLayer(layer)
+                this.showMarkerLabel(false)
                 
             }
         })
     }
 
-    getMarkers(){
-        return this.markers
+    showMarkerLabel(val){
+        // negate to get value for noHide
+        this.layers.markers.eachLayer(l => {
+            l.setLabelNoHide(val)
+        })
     }
 
     createPopUp(latlng, content){
@@ -70,21 +76,18 @@ export default class Map{
                     color: color,
                     fillOpacity: 0.6,
                 })
+
+            marker.bindLabel(title, {
+                noHide: false,
+                clickable: true,
+                direction: 'auto',
+                className: 'station-name'
+            })
+
             marker.bindPopup(popup)
+
             this.markers.push(marker)
         }
-    }
-
-    addTextMarker(title, latlng, popup) {
-        const icon = this.L.divIcon({
-            className: 'station-name',
-            html: `${title}` 
-        })
-        const marker = this.L.marker(latlng, {
-            icon: icon
-        })
-        marker.bindPopup(popup)
-        this.stationNames.push(marker)
     }
 
     addStationMarker(s){
@@ -98,8 +101,6 @@ export default class Map{
             const station_name = `${s.station_name}`
             this.addCircleMarker(station_name, latlng, 
                 s.color, popup)
-
-            this.addTextMarker(station_name, latlng, popup)
         }
     }
 
@@ -108,14 +109,8 @@ export default class Map{
         stations.forEach(s => this.addStationMarker(s))
         
         const markerLayer = this.L.featureGroup(this.markers)
-        const stationNameLayer = this.L.featureGroup(this.stationNames)
-
         this.layers['markers'] = markerLayer
-        this.layers['station_names'] = stationNameLayer
-
         markerLayer.addTo(this.instance)
-        // stationNameLayer.addTo(this.instance)
-        let bounds = markerLayer.getBounds()
     }
 
 }
