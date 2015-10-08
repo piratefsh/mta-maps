@@ -12,7 +12,7 @@ export default class SubwayMap extends LMap.Map{
         // get leaflet L object
         this.L = Mapbox()
         this.subwayLines = new SubwayLines()
-
+        this.stations = StationData.stations
         // layers and markers
         this.layers = {
             'lines': {},
@@ -100,7 +100,7 @@ export default class SubwayMap extends LMap.Map{
         }
     }
 
-    createStationMarker(s){
+    createStationMarker(unit, s){
         if(s.coords && s.coords.lat && s.coords.lng){
             const latlng = [s.coords.lat, s.coords.lng]
             const lines = this.lineToIcons(s.line_name)
@@ -112,13 +112,22 @@ export default class SubwayMap extends LMap.Map{
             const marker = this.createCircleMarker(station_name, latlng, 
                 s.color, popup)
             marker.lineName = s.line_name
+            marker.unit = unit
             return marker
         }
     }
 
     addAllStationMarkers() {
-        const stations = StationData.stations 
-        const markers = stations.map(s => this.createStationMarker(s))
+        const stations = this.stations 
+
+        // const markers = stations.map(s => this.createStationMarker(s))
+        const markers = []
+        for (let unit in stations){
+            const data = stations[unit]
+            const m = this.createStationMarker(unit, data)
+            markers.push(m)
+        }
+        
         // for each marker, add to layer for their line
         markers.forEach(m => {
             if (m == null) return 

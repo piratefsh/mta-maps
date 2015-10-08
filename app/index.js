@@ -1,5 +1,4 @@
 import test from './test'
-import SubwayMap from './components/SubwayMap'
 import HeatMap from './components/HeatMap'
 import MapControls from './components/MapControls'
 import SubwayLines from './components/SubwayLines'
@@ -9,7 +8,7 @@ let map, mapControls
 
 function init(){
     // init map and controls
-    map = new SubwayMap()
+    map = new HeatMap()
     mapControls = new MapControls(map)
 
     // init subway line controls
