@@ -11,7 +11,7 @@ export default class MapControls{
         this.map.eachLineLayer((linename,layer) => {
             lines.forEach(l => {
                 if(linename.indexOf(l) > -1){
-                    layer.addTo(this.map)
+                    layer.addTo(this.map).bringToFront()
                 }
             })
         })

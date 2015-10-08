@@ -16,6 +16,8 @@ export default class SubwayMap extends LMap.Map{
         // layers and markers
         this.layers = {
             'lines': {},
+            'heats_enter': {},
+            'heats_exit': {}
         }
 
         this.markers = []
@@ -30,7 +32,10 @@ export default class SubwayMap extends LMap.Map{
         this.setView(manhattanLatLng, zoomLevel)
 
         // when to show labels by default
-        this.zoomThresholdForLabel = 12
+        this.zoomThresholdForLabel = 13
+
+        // let l = this.L.heatLayer([40.745924, -73.998005], {radius: 50})
+        // l.addTo(this)
     }
 
     setCallbacks(){
