@@ -5,16 +5,15 @@ export default class HeatMap extends SubwayMap{
     constructor(...args){
         super(...args)
         this.data = TurnstileData
+        this.heatLayer = null
+        this.heatLayerRefs = {}
     }
 
-    // for each interval = for each day, for each time 
-        // make feature layers 
-    createHeatLayer(date){
+    generateHeatSizes(date){
         const stations = this.data.stations
         const radiusRatio = 5/this.data.max.entries
 
-        const heatsEnter = []
-        const heatsExit = []
+        const heats = {}
 
         for (let unit in stations){
             // check unit exists
@@ -36,25 +35,84 @@ export default class HeatMap extends SubwayMap{
                 times.forEach(t => {
                     if(t.entries){
                         const radius = t.entries * radiusRatio
-                        heatsEnter.push(this.L.circleMarker(ll, {
-                            radius: radius,
-                            color: 'white',
-                            fillOpacity: 0.13
-                        }))
-                    }
-                    if(t.exits){
-                        const radius = t.entries * radiusRatio
-                        heatsExit.push(this.L.circleMarker(ll, {
-                            radius: radius,
-                            color: 'blue',
-                            fillOpacity: 0.13
-                        }))
+                        const h = [ll, radius, unit] //this.createHeatMarker(ll, radius)
+                        if (t.time in heats){
+                            heats[t.time].push(h)
+                        }
+                        else{
+                            heats[t.time] = [h]
+                        }
                     }
                 })
             }
         }
-        const hExit = this.L.featureGroup(heatsExit).addTo(this).bringToFront()
-        const hEnt = this.L.featureGroup(heatsEnter).addTo(this).bringToFront()
-        // this.layers['heats_enter'] 
+        return heats
+    }
+
+    // for each interval = for each day, for each time 
+        // make feature layers 
+    createHeatLayer(date){
+        const sizes = this.generateHeatSizes(date)
+
+        let counter = 0
+        let frameLen = 2000
+
+        for(let time in sizes){
+            if(this.heatLayer == null){
+                this.createHeatLayerInit(sizes[time])
+            }
+            else{
+                this.updateHeatLayer(sizes[time], counter, frameLen)
+                counter += frameLen
+            }
+        }
+    }
+
+    createHeatLayerInit(sizes){
+        const heats = []
+        sizes.forEach(s => {
+            const ll    = s[0]
+            const r     = s[1]
+            const unit  = s[2]
+            const h     = this.createHeatMarker(ll, r)
+            h.unit = unit
+            heats.push(h)
+            this.heatLayerRefs[unit] = h
+            this.heatLayer = this.L.featureGroup(heats)
+            this.heatLayer.addTo(this).bringToFront()
+        })
+    }
+
+    updateHeatLayer(sizes, offset, timeout){
+        const delay = 10
+        const frames = timeout/delay
+
+        sizes.forEach(s => {
+            const ll    = s[0]
+            const r     = s[1]
+            const unit  = s[2]
+
+            if(unit in this.heatLayerRefs){
+                const h     = this.heatLayerRefs[unit]
+                const prevRadius = h.options.radius
+                const radiusIncreasePerFrame = (r - prevRadius)/frames
+
+                for(let i = 0; i < frames; i++){
+                    const radiusFrame = prevRadius + i*radiusIncreasePerFrame
+                    setTimeout(() => {
+                        //if(unit == 'R170') console.log(radiusFrame)
+                        h.setRadius(radiusFrame)
+                    }, offset + delay)
+                }
+            }
+        })
+    }
+
+    createHeatMarker(ll, radius){
+        return this.L.circleMarker(ll, {
+            radius: radius,
+            color: 'white',
+            fillOpacity: 0.13
+        })
     }
 }
