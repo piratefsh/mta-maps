@@ -55,15 +55,17 @@ export default class HeatMap extends SubwayMap{
         const sizes = this.generateHeatSizes(date)
 
         let counter = 0
-        let frameLen = 2000
+        let frameLen = 500
 
         for(let time in sizes){
             if(this.heatLayer == null){
                 this.createHeatLayerInit(sizes[time])
             }
             else{
-                this.updateHeatLayer(sizes[time], counter, frameLen)
-                counter += frameLen
+                setTimeout(()=>{
+                    this.updateHeatLayer(sizes[time], counter, frameLen)
+                }, counter)
+                counter+=frameLen
             }
         }
     }
@@ -94,16 +96,7 @@ export default class HeatMap extends SubwayMap{
 
             if(unit in this.heatLayerRefs){
                 const h     = this.heatLayerRefs[unit]
-                const prevRadius = h.options.radius
-                const radiusIncreasePerFrame = (r - prevRadius)/frames
-
-                for(let i = 0; i < frames; i++){
-                    const radiusFrame = prevRadius + i*radiusIncreasePerFrame
-                    setTimeout(() => {
-                        //if(unit == 'R170') console.log(radiusFrame)
-                        h.setRadius(radiusFrame)
-                    }, offset + delay)
-                }
+                h.setRadius(r)
             }
         })
     }
