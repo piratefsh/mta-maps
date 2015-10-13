@@ -168,12 +168,14 @@ export default class HeatMap extends SubwayMap{
 
                 console.log(r, originalSize, scale)
 
-                elem.style.transform = elem.style.transform.split('scale')[0] + ` scale(${scale}) `
+                // elem.style.transform = elem.style.transform.split('scale')[0] + ` scale(${scale}) `
 
-                // const rpx = Math.floor(r) + 'px'
-                // elem.style.width = rpx
-                // elem.style.height = rpx
-                // console.log(elem.style.width, rpx)
+                const rpx = Math.floor(r) + 'px'
+                const marginpx = -1 * Math.floor(r/2) + 'px'
+                elem.style.width = rpx
+                elem.style.height = rpx
+                elem.style.marginLeft = marginpx
+                elem.style.marginTop = marginpx
             }
         })
     }
