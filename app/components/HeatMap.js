@@ -11,7 +11,8 @@ export default class HeatMap extends SubwayMap{
 
     generateHeatSizes(date){
         const stations = this.data.stations
-        const radiusRatio = 5/this.data.max.entries
+        const radiusRatio = 5/this.data.max.entries 
+        const minRadius = 1
 
         // predefined time slots
         const heats = {
@@ -45,8 +46,8 @@ export default class HeatMap extends SubwayMap{
                 const times = s['dates'][date]['times']
                 times.forEach(t => {
                     if(t.entries){
-                        const radius = t.entries * radiusRatio
-                        const h = [ll, radius, unit]
+                        const radius = t.entries * radiusRatio + minRadius
+                        const h = [ll, radius, unit, t.entries]
 
                         // find time interval it belongs to
                         const i = this.findTimeInterval(intervals, t.time)
@@ -87,8 +88,8 @@ export default class HeatMap extends SubwayMap{
     createHeatLayer(date, onDone){
         const sizes = this.generateHeatSizes(date)
 
-        let counter = 0
         let frameLen = 1000
+        let counter = frameLen
 
         for(let time in sizes){
             if(this.heatLayer == null){
@@ -111,7 +112,8 @@ export default class HeatMap extends SubwayMap{
             const ll    = s[0]
             const r     = s[1]
             const unit  = s[2]
-            const h     = this.createHeatMarker(ll, r)
+            const volume  = s[3]
+            const h     = this.createHeatMarker(ll, r, volume)
             h.unit = unit
             heats.push(h)
             this.heatLayerRefs[unit] = h
@@ -136,9 +138,10 @@ export default class HeatMap extends SubwayMap{
         })
     }
 
-    createHeatMarker(ll, radius){
+    createHeatMarker(ll, radius, title){
         return this.L.circleMarker(ll, {
             radius: radius,
+            title: title,
             color: 'white',
             fillOpacity: 0.13
         })

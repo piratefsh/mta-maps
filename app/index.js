@@ -26,9 +26,14 @@ function init(){
     initSubwayLineControlBatch(true)
 
     const datetimeDisplayElem = document.querySelector('.datetime-display')
-    map.createHeatLayer('2015-09-09', (datetime) => {
-        datetimeDisplayElem.innerHTML = datetime.toString()
-    })
+    
+    const startAnimationElem = document.querySelector('#start-animation')
+    startAnimationElem.onclick = (e) => {
+        e.preventDefault()
+            map.createHeatLayer('2015-09-09', (datetime) => {
+            datetimeDisplayElem.innerHTML = datetime.toString()
+        })
+    }
 }
 
 function initSubwayLineControlBatch(selectAll){
