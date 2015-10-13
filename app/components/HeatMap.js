@@ -51,7 +51,7 @@ export default class HeatMap extends SubwayMap{
 
     // for each interval = for each day, for each time 
         // make feature layers 
-    createHeatLayer(date){
+    createHeatLayer(date, onDone){
         const sizes = this.generateHeatSizes(date)
 
         let counter = 0
@@ -64,6 +64,8 @@ export default class HeatMap extends SubwayMap{
             else{
                 setTimeout(()=>{
                     this.updateHeatLayer(sizes[time], counter, frameLen)
+                    const dt = new Date(Date.parse(`${date} ${time}`))
+                    onDone(dt)
                 }, counter)
                 counter+=frameLen
             }

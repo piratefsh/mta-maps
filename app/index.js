@@ -25,9 +25,9 @@ function init(){
     // init batch controls
     initSubwayLineControlBatch(true)
 
-    const datetimeDisplayElem = document.querySelectorAll('.datetime-display')
+    const datetimeDisplayElem = document.querySelector('.datetime-display')
     map.createHeatLayer('2015-09-09', (datetime) => {
-        datetimeDisplayElem.innerHTML(datetime)
+        datetimeDisplayElem.innerHTML = datetime.toString()
     })
 }
 
