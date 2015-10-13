@@ -10,7 +10,7 @@ export default class HeatMap extends SubwayMap{
         this.heatLayerRefs = {}
 
         const max = this.data.max.entries > this.data.max.exits ? this.data.max.entries : this.data.max.exits 
-        this.radiusRatio = 10/max
+        this.radiusRatio = 15/max
         this.minRadius = 2
 
     }
@@ -31,6 +31,7 @@ export default class HeatMap extends SubwayMap{
 
             const formattedDate = `${yr}-${mo}-${da}`
             setTimeout(()=> {
+                this.createHeatLayer(formattedDate, 'exits', onDoneInterval)
                 this.createHeatLayer(formattedDate, 'entries', onDoneInterval)
             }, timeout)
 
@@ -150,7 +151,7 @@ export default class HeatMap extends SubwayMap{
 
     createHeatLayerInit(sizes, which){
         sizes.forEach(s => {
-            const h     = this.createHeatMarker(s.unit, s.latlng, s.radius, `${s.stationName}`)
+            const h     = this.createHeatMarker(s.unit, s.latlng, s.radius, `${s.stationName}`, which)
             h.unit = s.unit
             this.heatLayerRefs[s.unit] = h
 
@@ -189,26 +190,35 @@ export default class HeatMap extends SubwayMap{
         sizes.forEach(s => {
             if(s.unit in this.heatLayerRefs){
                 const h     = this.heatLayerRefs[s.unit]
-                const elem = document.querySelector(`.heat-icon-${s.unit}`)
+                const elemEnt = document.querySelector(`.heat-icon-entries-${s.unit}`)
+                const elemExt = document.querySelector(`.heat-icon-exits-${s.unit}`)
+                this.updateMarker(elemEnt, s, 'entries')
+                this.updateMarker(elemExt, s, 'exits')
                 
-                if(elem){
-                    const originalSizePx = elem.style.width
-                    const originalSize = parseInt(originalSizePx.slice(0, originalSizePx.length - 2))
-
-                    const scale = s.radius/originalSize
-                    const rpx = Math.floor(s.radius) + 'px'
-                    const marginpx = -1 * Math.floor(s.radius/2) + 'px'
-                    
-                    elem.style.width = rpx
-                    elem.style.height = rpx
-                    elem.style.marginLeft = marginpx
-                    elem.style.marginTop = marginpx
-                }
             }
         })
     }
 
-    createHeatMarker(id, ll, radius, title){
+    updateMarker(elem, s, which){
+        if(elem){
+            const originalSizePx = elem.style.width
+            const originalSize = parseInt(originalSizePx.slice(0, originalSizePx.length - 2))
+
+            const radius = this.getRadius(s[which])
+            const scale = radius/originalSize
+            const rpx = Math.floor(radius) + 'px'
+            const marginpx = -1 * Math.floor(radius/2) + 'px'
+            
+            elem.style.width = rpx
+            elem.style.height = rpx
+            elem.style.marginLeft = marginpx
+            elem.style.marginTop = marginpx
+        }
+    }
+
+    createHeatMarker(id, ll, radius, title, which){
+
+        const whichClassName = which == 'entries' ? 'heat-icon-entries' : 'heat-icon-exits'
         radius = Math.floor(radius)
         const icon = new this.L.icon({
             iconUrl: heatCirclePng,
@@ -217,10 +227,10 @@ export default class HeatMap extends SubwayMap{
             iconAnchor: [10, 10],
             popupAnchor: [10, 0],
             shadowSize: [0, 0],
-            className: 'heat-icon',
+            className: `heat-icon ${whichClassName}`,
         });
 
-        icon.options.className += ` heat-icon-${id}`
+        icon.options.className += ` heat-icon-${which}-${id}`
         icon.options.iconSize = [radius, radius]
         icon.options.iconAnchor = [radius/2, radius/2]
 

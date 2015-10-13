@@ -25,12 +25,16 @@
 
 .heat-icon
     $size: 2px
-    background-color: rgba(white, 0.2)
     border-radius: 50%
     min-width: $size 
     min-height: $size
-    border: 1px solid rgba(white, 0.3)
     transition: all 0.9s
+    &.heat-icon-entries
+        background-color: rgba(white, 0.2)
+        border: 1px solid rgba(white, 0.3)
+    &.heat-icon-exits
+        background-color: rgba(red, 0.2)
+        border: 1px solid rgba(red, 0.3)
 
 .heat-transition-enter
     opacity: 0
