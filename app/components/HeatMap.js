@@ -29,7 +29,7 @@ export default class HeatMap extends SubwayMap{
 
             const formattedDate = `${yr}-${mo}-${da}`
             setTimeout(()=> {
-                this.createHeatLayer(formattedDate, onDoneInterval)
+                this.createHeatLayer(formattedDate, 'entries', onDoneInterval)
             }, timeout)
 
             timeout += timeFrame
@@ -42,7 +42,7 @@ export default class HeatMap extends SubwayMap{
         return this.radiusRatio * volume + this.minRadius
     }
 
-    generateHeatSizes(date){
+    generateHeatSizes(date, which){
         const stations = this.data.stations
 
         // predefined time slots
@@ -78,8 +78,8 @@ export default class HeatMap extends SubwayMap{
             if(date in s['dates']){
                 const times = s['dates'][date]['times']
                 times.forEach(t => {
-                    if(t.entries){
-                        const radius = this.getRadius(t.entries)
+                    if(t.entries && t.exits){
+                        const radius = this.getRadius(t[which])
                         const h = {
                             latlng: ll, 
                             radius: radius, 
@@ -125,15 +125,15 @@ export default class HeatMap extends SubwayMap{
 
     // for each interval = for each day, for each time 
         // make feature layers 
-    createHeatLayer(date, onDone){
-        const sizes = this.generateHeatSizes(date)
+    createHeatLayer(date, which, onDone){
+        const sizes = this.generateHeatSizes(date, which)
 
         let frameLen = 1000
         let counter = frameLen
 
         for(let time in sizes){
-            if(Object.keys(this.layers['entries']).length < 1){
-                this.createHeatLayerInit(sizes[time])
+            if(Object.keys(this.layers[which]).length < 1){
+                this.createHeatLayerInit(sizes[time], which)
             }
             else{
                 setTimeout(()=>{
@@ -141,12 +141,12 @@ export default class HeatMap extends SubwayMap{
                     const dt = new Date(Date.parse(`${date} ${time}`))
                     onDone(dt)
                 }, counter)
-                counter+=frameLen
+                counter += frameLen
             }
         }
     }
 
-    createHeatLayerInit(sizes){
+    createHeatLayerInit(sizes, which){
         sizes.forEach(s => {
             const h     = this.createHeatMarker(s.unit, s.latlng, s.radius, `${s.stationName}`)
             h.unit = s.unit
@@ -156,7 +156,7 @@ export default class HeatMap extends SubwayMap{
 
             // add layer by lines 
             lines.forEach(l => {
-                const layers = this.layers['entries']
+                const layers = this.layers[which]
                 if (l in layers){
                     layers[l].addLayer(h)
                 }
@@ -166,7 +166,7 @@ export default class HeatMap extends SubwayMap{
             })
 
         })
-        this.eachHeatLayer('entries', (ln, l) => {
+        this.eachHeatLayer(which, (ln, l) => {
             l.addTo(this)
         })
     }
