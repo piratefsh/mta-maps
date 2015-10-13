@@ -16,8 +16,8 @@ export default class SubwayMap extends LMap.Map{
         // layers and markers
         this.layers = {
             'lines': {},
-            'heats_enter': {},
-            'heats_exit': {}
+            'entries': {},
+            'exits': {}
         }
 
         this.markers = []

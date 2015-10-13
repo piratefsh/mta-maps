@@ -9,7 +9,7 @@ export default class MapControls{
         }
 
         this.map.eachLineLayer(r)
-        this.map.eachHeatEnterLayer(r)
+        this.map.eachHeatLayer(r)
 
         const f = (linename,layer) => {
             // console.log(linename, layer)
@@ -21,6 +21,6 @@ export default class MapControls{
         }
 
         this.map.eachLineLayer(f)
-        this.map.eachHeatEnterLayer(f)
+        this.map.eachHeatLayer('entries', f)
     }
 }

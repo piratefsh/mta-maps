@@ -125,7 +125,7 @@ export default class HeatMap extends SubwayMap{
         let counter = frameLen
 
         for(let time in sizes){
-            if(Object.keys(this.layers['heats_enter']).length < 1){
+            if(Object.keys(this.layers['entries']).length < 1){
                 this.createHeatLayerInit(sizes[time])
             }
             else{
@@ -156,23 +156,24 @@ export default class HeatMap extends SubwayMap{
 
             // add layer by lines 
             lines.forEach(l => {
-                if (l in this.layers['heats_enter']){
-                    this.layers['heats_enter'][l].addLayer(h)
+                const layers = this.layers['entries']
+                if (l in layers){
+                    layers[l].addLayer(h)
                 }
                 else{
-                    this.layers['heats_enter'][l] = this.L.featureGroup([h])
+                    layers[l] = this.L.featureGroup([h])
                 }
             })
 
         })
-        this.eachHeatEnterLayer((ln, l) => {
+        this.eachHeatLayer('entries', (ln, l) => {
             l.addTo(this)
         })
     }
 
-    // for each layer in this
-    eachHeatEnterLayer(f){
-        const lines = this.layers['heats_enter']
+    // for each layer in this. which = entries|exits
+    eachHeatLayer(which, f){
+        const lines = this.layers[which]
         for (let linename in lines){
             const layer = lines[linename]
             f(linename, layer)
