@@ -25,19 +25,23 @@ function init(){
     // init batch controls
     initSubwayLineControlBatch(true)
 
-    const datetimeDisplayElem = document.querySelector('.datetime-display')
     
     // callback on start button
     const startAnimationElem = document.querySelector('#start-animation')
     startAnimationElem.onclick = (e) => {
         if(e) e.preventDefault()
-        map.createHeatLayer('2015-09-09', (datetime) => {
-            datetimeDisplayElem.innerHTML = datetime.toString()
-        })
+        
+        map.heat({start: '2015-09-09 GMT-04:00', 
+            end: '2015-09-16 GMT-04:00'}, updateHUDTime)
     }
 
     // dev
     startAnimationElem.onclick()
+}
+
+function updateHUDTime(datetime){
+    const datetimeDisplayElem = document.querySelector('.datetime-display')
+    datetimeDisplayElem.innerHTML = datetime.toString()
 }
 
 function initSubwayLineControlBatch(selectAll){

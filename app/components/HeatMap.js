@@ -31,6 +31,31 @@ export default class HeatMap extends SubwayMap{
 
     }
 
+    heat(options, onDoneInterval){
+        const start = new Date(Date.parse(options.start))
+        const end = new Date(Date.parse(options.end))
+        const day = new Date(start)
+        let timeout = 1000
+        let timeFrame = 6000
+        while(day <= end){
+            const yr = `${day.getFullYear()}`
+            let mo = `${day.getMonth() + 1}`
+            let da = `${day.getDate()}`
+
+            mo = mo.length == 1? `0${mo}` : mo
+            da = da.length == 1? `0${da}` : da
+
+            const formattedDate = `${yr}-${mo}-${da}`
+            setTimeout(()=> {
+                this.createHeatLayer(formattedDate, onDoneInterval)
+            }, timeout)
+
+            timeout += timeFrame
+            // day = next day
+            day.setDate(day.getDate() + 1)
+        }
+    }
+
     getRadius(volume){
         return this.radiusRatio * volume + this.minRadius
     }
@@ -163,15 +188,10 @@ export default class HeatMap extends SubwayMap{
                 const originalSizePx = elem.style.width
                 const originalSize = parseInt(originalSizePx.slice(0, originalSizePx.length - 2))
 
-
                 const scale = r/originalSize
-
-                console.log(r, originalSize, scale)
-
-                // elem.style.transform = elem.style.transform.split('scale')[0] + ` scale(${scale}) `
-
                 const rpx = Math.floor(r) + 'px'
                 const marginpx = -1 * Math.floor(r/2) + 'px'
+                
                 elem.style.width = rpx
                 elem.style.height = rpx
                 elem.style.marginLeft = marginpx
