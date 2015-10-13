@@ -13,7 +13,18 @@ export default class HeatMap extends SubwayMap{
         const stations = this.data.stations
         const radiusRatio = 5/this.data.max.entries
 
-        const heats = {}
+        // predefined time slots
+        const heats = {
+            '00:00:00': [],
+            '04:00:00': [],
+            '08:00:00': [],
+            '12:00:00': [],
+            '16:00:00': [],
+            '20:00:00': [],
+            '23:59:59': []
+        }
+
+        const intervals = Object.keys(heats).sort()
 
         for (let unit in stations){
             // check unit exists
@@ -35,12 +46,12 @@ export default class HeatMap extends SubwayMap{
                 times.forEach(t => {
                     if(t.entries){
                         const radius = t.entries * radiusRatio
-                        const h = [ll, radius, unit] //this.createHeatMarker(ll, radius)
-                        if (t.time in heats){
-                            heats[t.time].push(h)
-                        }
-                        else{
-                            heats[t.time] = [h]
+                        const h = [ll, radius, unit]
+
+                        // find time interval it belongs to
+                        const i = this.findTimeInterval(intervals, t.time)
+                        if (i > -1){
+                            heats[intervals[i]].push(h)
                         }
                     }
                 })
@@ -49,13 +60,35 @@ export default class HeatMap extends SubwayMap{
         return heats
     }
 
+    // find index of upper bound time interval where 
+    // list = ['00:00', '04:00', ... '20:00'] (sorted) 
+    // and time = '03:55' returns 1. uses bisection/binary search
+    findTimeInterval(list, time){
+        if(list.length < 1 || time.length < 1){
+            return -1
+        }
+        let lo = 0;
+        let hi = list.length
+        let mid;
+        while(lo < hi){
+            mid = Math.floor((lo + hi)/2)
+            if (list[mid] < time){
+                lo = mid + 1
+            }
+            else{
+                hi = mid
+            }
+        }
+        return lo
+    }
+
     // for each interval = for each day, for each time 
         // make feature layers 
     createHeatLayer(date, onDone){
         const sizes = this.generateHeatSizes(date)
 
         let counter = 0
-        let frameLen = 500
+        let frameLen = 1000
 
         for(let time in sizes){
             if(this.heatLayer == null){
