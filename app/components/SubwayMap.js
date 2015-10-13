@@ -33,9 +33,6 @@ export default class SubwayMap extends LMap.Map{
 
         // when to show labels by default
         this.zoomThresholdForLabel = 13
-
-        // let l = this.L.heatLayer([40.745924, -73.998005], {radius: 50})
-        // l.addTo(this)
     }
 
     setCallbacks(){

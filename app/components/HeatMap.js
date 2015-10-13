@@ -13,6 +13,15 @@ export default class HeatMap extends SubwayMap{
         this.radiusRatio = 15/max
         this.minRadius = 2
 
+        this.dayFrame = 6000
+        this.timeIntervals = [
+            '00:00:00', 
+            '04:00:00', 
+            '08:00:00', 
+            '12:00:00',
+            '16:00:00',
+            '20:00:00',
+            '23:59:59']
     }
 
     heat(options, onDoneInterval){
@@ -20,7 +29,7 @@ export default class HeatMap extends SubwayMap{
         const end = new Date(Date.parse(options.end))
         const day = new Date(start)
         let timeout = 1000
-        let timeFrame = 6000
+        let timeFrame = this.dayFrame
         while(day <= end){
             const yr = `${day.getFullYear()}`
             let mo = `${day.getMonth() + 1}`
@@ -49,14 +58,9 @@ export default class HeatMap extends SubwayMap{
         const stations = this.data.stations
 
         // predefined time slots
-        const heats = {
-            '00:00:00': [],
-            '04:00:00': [],
-            '08:00:00': [],
-            '12:00:00': [],
-            '16:00:00': [],
-            '20:00:00': [],
-            '23:59:59': []
+        const heats = {}
+        for(let time of this.timeIntervals){
+            heats[time] = []
         }
 
         const intervals = Object.keys(heats).sort()
