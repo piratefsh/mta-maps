@@ -19,7 +19,7 @@ export default class HeatMap extends SubwayMap{
                 popupAnchor: [10, 0],
                 shadowSize: [0, 0],
                 className: 'heat-icon',
-                cssTransitionJitterIn: 10,
+                cssTransitionJitterIn: 50,
                 cssTransitionJitterOut: 0,
                 cssTransitionName: 'heat-transition',
                 cssTransitionBatches: 0
@@ -85,6 +85,7 @@ export default class HeatMap extends SubwayMap{
 
             const s = stations[unit]
             const ll = this.stations[unit].coords
+            const lines = this.stations[unit].line_name
 
             // check valid latlng
             if(!(ll && 'lat' in ll && 'lng' in ll)){
@@ -96,7 +97,7 @@ export default class HeatMap extends SubwayMap{
                 times.forEach(t => {
                     if(t.entries){
                         const radius = this.getRadius(t.entries)
-                        const h = [ll, radius, unit, t.entries, unit]
+                        const h = [ll, radius, unit, t.entries, unit, lines]
 
                         // find time interval it belongs to
                         const i = this.findTimeInterval(intervals, t.time)
@@ -141,7 +142,7 @@ export default class HeatMap extends SubwayMap{
         let counter = frameLen
 
         for(let time in sizes){
-            if(this.heatLayer == null){
+            if(Object.keys(this.layers['heats_enter']).length < 1){
                 this.createHeatLayerInit(sizes[time])
             }
             else{
@@ -156,20 +157,38 @@ export default class HeatMap extends SubwayMap{
     }
 
     createHeatLayerInit(sizes){
-        const heats = []
         sizes.forEach(s => {
             const ll    = s[0]
             const r     = s[1]
             const unit  = s[2]
             const vol   = s[3]
             const id    = s[4]
+            const lineName    = s[5]
             const h     = this.createHeatMarker(id, ll, r, vol)
             h.unit = unit
-            heats.push(h)
             this.heatLayerRefs[unit] = h
-            this.heatLayer = this.L.featureGroup(heats)
-            this.heatLayer.addTo(this).bringToBack()
+
+            const lines = lineName.split("")
+            lines.forEach(l => {
+                if (l in this.layers['heats_enter']){
+                    this.layers['heats_enter'][l].addLayer(h)
+                }
+                else{
+                    this.layers['heats_enter'][l] = this.L.featureGroup([h])
+                }
+            })
+
+            this.eachHeatEnterLayer((ln, l) => l.addTo(this).bringToBack)
         })
+    }
+
+    // for each layer in this
+    eachHeatEnterLayer(f){
+        const lines = this.layers['heats_enter']
+        for (let linename in lines){
+            const layer = lines[linename]
+            f(linename, layer)
+        }
     }
 
     updateHeatLayer(sizes, offset, timeout){
