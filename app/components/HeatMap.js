@@ -8,7 +8,9 @@ export default class HeatMap extends SubwayMap{
         super(...args)
         this.data = TurnstileData
         this.heatLayerRefs = {}
-        this.radiusRatio = 10/this.data.max.entries 
+
+        const max = this.data.max.entries > this.data.max.exits ? this.data.max.entries : this.data.max.exits 
+        this.radiusRatio = 10/max
         this.minRadius = 2
 
     }
