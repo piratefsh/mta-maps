@@ -80,7 +80,14 @@ export default class HeatMap extends SubwayMap{
                 times.forEach(t => {
                     if(t.entries){
                         const radius = this.getRadius(t.entries)
-                        const h = [ll, radius, unit, t.entries, unit, lines, stationName]
+                        const h = {
+                            latlng: ll, 
+                            radius: radius, 
+                            unit: unit, 
+                            entries: t.entries, 
+                            exits: t.exits, 
+                            lineName: lines,
+                            stationName: stationName}
 
                         // find time interval it belongs to
                         const i = this.findTimeInterval(intervals, t.time)
@@ -141,18 +148,11 @@ export default class HeatMap extends SubwayMap{
 
     createHeatLayerInit(sizes){
         sizes.forEach(s => {
-            const ll    = s[0]
-            const r     = s[1]
-            const unit  = s[2]
-            const vol   = s[3]
-            const id    = s[4]
-            const lineName    = s[5]
-            const stationName    = s[6]
-            const h     = this.createHeatMarker(id, ll, r, `${stationName}`)
-            h.unit = unit
-            this.heatLayerRefs[unit] = h
+            const h     = this.createHeatMarker(s.unit, s.latlng, s.radius, `${s.stationName}`)
+            h.unit = s.unit
+            this.heatLayerRefs[s.unit] = h
 
-            const lines = lineName.split("")
+            const lines = s.lineName.split("")
 
             // add layer by lines 
             lines.forEach(l => {
@@ -185,21 +185,17 @@ export default class HeatMap extends SubwayMap{
         const frames = timeout/delay
 
         sizes.forEach(s => {
-            const ll    = s[0]
-            const r     = s[1]
-            const unit  = s[2]
-
-            if(unit in this.heatLayerRefs){
-                const h     = this.heatLayerRefs[unit]
-                const elem = document.querySelector(`.heat-icon-${unit}`)
+            if(s.unit in this.heatLayerRefs){
+                const h     = this.heatLayerRefs[s.unit]
+                const elem = document.querySelector(`.heat-icon-${s.unit}`)
                 
                 if(elem){
                     const originalSizePx = elem.style.width
                     const originalSize = parseInt(originalSizePx.slice(0, originalSizePx.length - 2))
 
-                    const scale = r/originalSize
-                    const rpx = Math.floor(r) + 'px'
-                    const marginpx = -1 * Math.floor(r/2) + 'px'
+                    const scale = s.radius/originalSize
+                    const rpx = Math.floor(s.radius) + 'px'
+                    const marginpx = -1 * Math.floor(s.radius/2) + 'px'
                     
                     elem.style.width = rpx
                     elem.style.height = rpx
