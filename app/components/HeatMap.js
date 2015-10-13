@@ -68,6 +68,7 @@ export default class HeatMap extends SubwayMap{
             const s = stations[unit]
             const ll = this.stations[unit].coords
             const lines = this.stations[unit].line_name
+            const stationName = this.stations[unit].station_name
 
             // check valid latlng
             if(!(ll && 'lat' in ll && 'lng' in ll)){
@@ -79,7 +80,7 @@ export default class HeatMap extends SubwayMap{
                 times.forEach(t => {
                     if(t.entries){
                         const radius = this.getRadius(t.entries)
-                        const h = [ll, radius, unit, t.entries, unit, lines]
+                        const h = [ll, radius, unit, t.entries, unit, lines, stationName]
 
                         // find time interval it belongs to
                         const i = this.findTimeInterval(intervals, t.time)
@@ -139,7 +140,6 @@ export default class HeatMap extends SubwayMap{
     }
 
     createHeatLayerInit(sizes){
-        console.log('init')
         sizes.forEach(s => {
             const ll    = s[0]
             const r     = s[1]
@@ -147,7 +147,8 @@ export default class HeatMap extends SubwayMap{
             const vol   = s[3]
             const id    = s[4]
             const lineName    = s[5]
-            const h     = this.createHeatMarker(id, ll, r, vol)
+            const stationName    = s[6]
+            const h     = this.createHeatMarker(id, ll, r, `${stationName}`)
             h.unit = unit
             this.heatLayerRefs[unit] = h
 
