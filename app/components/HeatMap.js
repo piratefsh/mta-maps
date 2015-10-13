@@ -1,5 +1,8 @@
 import SubwayMap from './SubwayMap'
 import TurnstileData from 'files/turnstiles.json'
+import TransitionedIcon from 'leaflet-transitionedicon'
+import heatCircleSvg from 'file!images/heat-circle.svg'
+import heatCirclePng from 'images/heat-circle.png'
 
 export default class HeatMap extends SubwayMap{
     constructor(...args){
@@ -7,12 +10,33 @@ export default class HeatMap extends SubwayMap{
         this.data = TurnstileData
         this.heatLayer = null
         this.heatLayerRefs = {}
+        this.HeatIcon = TransitionedIcon.extend({
+            options: {
+                iconUrl: heatCirclePng,
+                iconRetinaUrl: heatCirclePng,
+                iconSize: [20, 20],
+                iconAnchor: [10, 10],
+                popupAnchor: [10, 0],
+                shadowSize: [0, 0],
+                className: 'heat-icon',
+                cssTransitionJitterIn: 10,
+                cssTransitionJitterOut: 0,
+                cssTransitionName: 'heat-transition',
+                cssTransitionBatches: 0
+            }
+        });
+
+        this.radiusRatio = 10/this.data.max.entries 
+        this.minRadius = 2
+
+    }
+
+    getRadius(volume){
+        return this.radiusRatio * volume + this.minRadius
     }
 
     generateHeatSizes(date){
         const stations = this.data.stations
-        const radiusRatio = 5/this.data.max.entries 
-        const minRadius = 1
 
         // predefined time slots
         const heats = {
@@ -46,8 +70,8 @@ export default class HeatMap extends SubwayMap{
                 const times = s['dates'][date]['times']
                 times.forEach(t => {
                     if(t.entries){
-                        const radius = t.entries * radiusRatio + minRadius
-                        const h = [ll, radius, unit, t.entries]
+                        const radius = this.getRadius(t.entries)
+                        const h = [ll, radius, unit, t.entries, unit]
 
                         // find time interval it belongs to
                         const i = this.findTimeInterval(intervals, t.time)
@@ -112,13 +136,14 @@ export default class HeatMap extends SubwayMap{
             const ll    = s[0]
             const r     = s[1]
             const unit  = s[2]
-            const volume  = s[3]
-            const h     = this.createHeatMarker(ll, r, volume)
+            const vol   = s[3]
+            const id    = s[4]
+            const h     = this.createHeatMarker(id, ll, r, vol)
             h.unit = unit
             heats.push(h)
             this.heatLayerRefs[unit] = h
             this.heatLayer = this.L.featureGroup(heats)
-            this.heatLayer.addTo(this).bringToFront()
+            this.heatLayer.addTo(this).bringToBack()
         })
     }
 
@@ -133,17 +158,36 @@ export default class HeatMap extends SubwayMap{
 
             if(unit in this.heatLayerRefs){
                 const h     = this.heatLayerRefs[unit]
-                h.setRadius(r)
+                const elem = document.querySelector(`.heat-icon-${unit}`)
+                
+                const originalSizePx = elem.style.width
+                const originalSize = parseInt(originalSizePx.slice(0, originalSizePx.length - 2))
+
+
+                const scale = r/originalSize
+
+                console.log(r, originalSize, scale)
+
+                elem.style.transform = elem.style.transform.split('scale')[0] + ` scale(${scale}) `
+
+                // const rpx = Math.floor(r) + 'px'
+                // elem.style.width = rpx
+                // elem.style.height = rpx
+                // console.log(elem.style.width, rpx)
             }
         })
     }
 
-    createHeatMarker(ll, radius, title){
-        return this.L.circleMarker(ll, {
-            radius: radius,
+    createHeatMarker(id, ll, radius, title){
+        radius = Math.floor(radius)
+        const icon = new this.HeatIcon()
+        icon.options.className += ` heat-icon-${id}`
+        icon.options.iconSize = [radius, radius]
+        icon.options.iconAnchor = [radius/2, radius/2]
+
+        return this.L.marker(ll, {
             title: title,
-            color: 'white',
-            fillOpacity: 0.13
+            icon: icon
         })
     }
 }

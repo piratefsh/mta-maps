@@ -27,13 +27,17 @@ function init(){
 
     const datetimeDisplayElem = document.querySelector('.datetime-display')
     
+    // callback on start button
     const startAnimationElem = document.querySelector('#start-animation')
     startAnimationElem.onclick = (e) => {
-        e.preventDefault()
-            map.createHeatLayer('2015-09-09', (datetime) => {
+        if(e) e.preventDefault()
+        map.createHeatLayer('2015-09-09', (datetime) => {
             datetimeDisplayElem.innerHTML = datetime.toString()
         })
     }
+
+    // dev
+    startAnimationElem.onclick()
 }
 
 function initSubwayLineControlBatch(selectAll){
