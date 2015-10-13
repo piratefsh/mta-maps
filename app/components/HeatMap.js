@@ -1,6 +1,5 @@
 import SubwayMap from './SubwayMap'
 import TurnstileData from 'files/turnstiles.json'
-import TransitionedIcon from 'leaflet-transitionedicon'
 import heatCircleSvg from 'file!images/heat-circle.svg'
 import heatCirclePng from 'images/heat-circle.png'
 
@@ -8,24 +7,7 @@ export default class HeatMap extends SubwayMap{
     constructor(...args){
         super(...args)
         this.data = TurnstileData
-        this.heatLayer = null
         this.heatLayerRefs = {}
-        this.HeatIcon = TransitionedIcon.extend({
-            options: {
-                iconUrl: heatCirclePng,
-                iconRetinaUrl: heatCirclePng,
-                iconSize: [20, 20],
-                iconAnchor: [10, 10],
-                popupAnchor: [10, 0],
-                shadowSize: [0, 0],
-                className: 'heat-icon',
-                cssTransitionJitterIn: 50,
-                cssTransitionJitterOut: 0,
-                cssTransitionName: 'heat-transition',
-                cssTransitionBatches: 0
-            }
-        });
-
         this.radiusRatio = 10/this.data.max.entries 
         this.minRadius = 2
 
@@ -157,6 +139,7 @@ export default class HeatMap extends SubwayMap{
     }
 
     createHeatLayerInit(sizes){
+        console.log('init')
         sizes.forEach(s => {
             const ll    = s[0]
             const r     = s[1]
@@ -169,6 +152,8 @@ export default class HeatMap extends SubwayMap{
             this.heatLayerRefs[unit] = h
 
             const lines = lineName.split("")
+
+            // add layer by lines 
             lines.forEach(l => {
                 if (l in this.layers['heats_enter']){
                     this.layers['heats_enter'][l].addLayer(h)
@@ -178,7 +163,9 @@ export default class HeatMap extends SubwayMap{
                 }
             })
 
-            this.eachHeatEnterLayer((ln, l) => l.addTo(this).bringToBack)
+        })
+        this.eachHeatEnterLayer((ln, l) => {
+            l.addTo(this)
         })
     }
 
@@ -204,24 +191,35 @@ export default class HeatMap extends SubwayMap{
                 const h     = this.heatLayerRefs[unit]
                 const elem = document.querySelector(`.heat-icon-${unit}`)
                 
-                const originalSizePx = elem.style.width
-                const originalSize = parseInt(originalSizePx.slice(0, originalSizePx.length - 2))
+                if(elem){
+                    const originalSizePx = elem.style.width
+                    const originalSize = parseInt(originalSizePx.slice(0, originalSizePx.length - 2))
 
-                const scale = r/originalSize
-                const rpx = Math.floor(r) + 'px'
-                const marginpx = -1 * Math.floor(r/2) + 'px'
-                
-                elem.style.width = rpx
-                elem.style.height = rpx
-                elem.style.marginLeft = marginpx
-                elem.style.marginTop = marginpx
+                    const scale = r/originalSize
+                    const rpx = Math.floor(r) + 'px'
+                    const marginpx = -1 * Math.floor(r/2) + 'px'
+                    
+                    elem.style.width = rpx
+                    elem.style.height = rpx
+                    elem.style.marginLeft = marginpx
+                    elem.style.marginTop = marginpx
+                }
             }
         })
     }
 
     createHeatMarker(id, ll, radius, title){
         radius = Math.floor(radius)
-        const icon = new this.HeatIcon()
+        const icon = new this.L.icon({
+            iconUrl: heatCirclePng,
+            iconRetinaUrl: heatCirclePng,
+            iconSize: [0, 0],
+            iconAnchor: [10, 10],
+            popupAnchor: [10, 0],
+            shadowSize: [0, 0],
+            className: 'heat-icon',
+        });
+
         icon.options.className += ` heat-icon-${id}`
         icon.options.iconSize = [radius, radius]
         icon.options.iconAnchor = [radius/2, radius/2]

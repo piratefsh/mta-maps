@@ -24,7 +24,6 @@ function init(){
 
     // init batch controls
     initSubwayLineControlBatch(true)
-
     
     // callback on start button
     const startAnimationElem = document.querySelector('#start-animation')
@@ -32,7 +31,7 @@ function init(){
         if(e) e.preventDefault()
         
         map.heat({start: '2015-09-09 GMT-04:00', 
-            end: '2015-09-16 GMT-04:00'}, updateHUDTime)
+            end: '2015-09-15 GMT-04:00'}, updateHUDTime)
     }
 
     // dev

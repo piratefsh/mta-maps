@@ -4,16 +4,23 @@ export default class MapControls{
     }
 
     showLines(lines){
-        this.map.eachLineLayer((linename,layer) => {
+        const r = (linename,layer) => {
             this.map.removeLayer(layer)
-        })
+        }
 
-        this.map.eachLineLayer((linename,layer) => {
+        this.map.eachLineLayer(r)
+        this.map.eachHeatEnterLayer(r)
+
+        const f = (linename,layer) => {
+            // console.log(linename, layer)
             lines.forEach(l => {
                 if(linename.indexOf(l) > -1){
                     layer.addTo(this.map).bringToFront()
                 }
             })
-        })
+        }
+
+        this.map.eachLineLayer(f)
+        this.map.eachHeatEnterLayer(f)
     }
 }
