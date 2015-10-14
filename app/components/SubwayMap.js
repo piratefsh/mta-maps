@@ -25,11 +25,9 @@ export default class SubwayMap extends LMap.Map{
         this.stationNames = []
 
         this.setCallbacks()
-        this.addAllStationMarkers()
+        this.markerBounds = this.addAllStationMarkers()
 
         this.addCustomControls()
-        this.markerBounds = this.layers['lines']['A'].getBounds()
-
         this.setCustomView()
 
         // when to show labels by default
@@ -42,6 +40,7 @@ export default class SubwayMap extends LMap.Map{
         const manhattanLatLng = [40.759123, -73.953266]
         const zoomLevel = 12
         this.fitBounds(this.markerBounds)
+        this.setZoom(zoomLevel)
         // this.setView(manhattanLatLng, zoomLevel)
     }
 
@@ -151,15 +150,20 @@ export default class SubwayMap extends LMap.Map{
         }
     }
 
+    //add stations and returns their bounds
     addAllStationMarkers() {
         const stations = this.stations 
 
         // const markers = stations.map(s => this.createStationMarker(s))
         const markers = []
+        const lls = []
         for (let unit in stations){
             const data = stations[unit]
             const m = this.createStationMarker(unit, data)
-            markers.push(m)
+            if(m){
+                markers.push(m)
+                lls.push(m.getLatLng())
+            }
         }
         
         // for each marker, add to layer for their line
@@ -179,6 +183,7 @@ export default class SubwayMap extends LMap.Map{
 
         this.eachLineLayer((ln, l) => l.addTo(this))
 
+        return this.L.latLngBounds(lls)
     }
 
     // debug tools
