@@ -759,6 +759,17 @@
             "line_name": "1",
             "station_name": "ST. GEORGE"
         },
+        "R072": {
+            "color": "#B933AD",
+            "control_area": "R550",
+            "coords": {
+                "lat": 40.754963,
+                "lng": -74.001017
+            },
+            "division": "IRT",
+            "line_name": "7",
+            "station_name": "34 ST-HUDSON YD"
+        },
         "R076": {
             "color": "#00933C",
             "control_area": "MCC07",

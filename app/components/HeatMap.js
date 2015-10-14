@@ -21,6 +21,7 @@ export default class HeatMap extends SubwayMap{
             '16:00:00',
             '20:00:00',
             '23:59:59']
+            
         this.timeFrame = 2000
         this.dayFrame = this.timeFrame * (this.timeIntervals.length-1)
     }
