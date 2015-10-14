@@ -2,30 +2,34 @@
 <html>
 <head>
     <title>NYC Subway Traffic Visualization </title>
-    <link rel='stylesheet' href='./styles.css'/>
+    <link rel='stylesheet' href='/styles.css'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
     <div class="row row-container">
         <div class="col-sm-3 col-sidebar">
             <div class='sidebar'>
                 <h2 class='title'>NYC Subway Traffic</h2>
-                <p>Entrace and exit traffic at each MTA station over time</p>
+                <p>Entrance and exit traffic at each MTA station over time</p>
                 <form id='animation-controls'>
                     <fieldset>
                         <button id='start-animation' class='btn btn-success'>Start</button> 
+                        <button id='toggle-lines' class='btn btn-default hidden-sm'>Select Lines</button> 
                     </fieldset>
                 </form>
-                <hr/>
-                <form id='subway-lines'>
-                    <fieldset>
-                        <input type="checkbox" value="check-all" class="control-subway-line-batch"/>
-                        <label>All</label>
-                    </fieldset>
-                    <fieldset>
-                        <input type="checkbox" value="check-none" class="control-subway-line-batch"/>
-                        <label>None</label>
-                    </fieldset>
-                </form>
+                <div class="collapse-sm visible-sm">
+                    <hr/>
+                    <form id='subway-lines'>
+                        <fieldset>
+                            <input type="checkbox" value="check-all" class="control-subway-line-batch"/>
+                            <label>All</label>
+                        </fieldset>
+                        <fieldset>
+                            <input type="checkbox" value="check-none" class="control-subway-line-batch"/>
+                            <label>None</label>
+                        </fieldset>
+                    </form>
+                </div>
 
 
             </div>
