@@ -22,8 +22,8 @@ function init(){
 
     // init subway line controls
     const sl = new SubwayLines()
-    let subwayLines = sl.getAllIcons()
-    let subwayListElem = document.querySelector('#subway-lines')
+    const subwayLines = sl.getAllIcons()
+    const subwayListElem = document.querySelector('#subway-lines')
 
     for(let lines in subwayLines){
         const icons = subwayLines[lines]
@@ -33,14 +33,35 @@ function init(){
 
     // init batch controls
     initSubwayLineControlBatch(true)
-    
+    initBtnCallbacks()
+}
+
+function initBtnCallbacks(){
     // callback on start button
     const startAnimationElem = document.querySelector('#start-animation')
     startAnimationElem.onclick = (e) => {
         if(e) e.preventDefault()
-        
         map.heat({start: '2015-09-09 GMT-04:00', 
             end: '2015-09-15 GMT-04:00'}, updateHUDTime)
+    }
+
+    // responsive toggle stufff
+    const toggleLines = document.querySelector('#toggle-lines')
+    toggleLines.onclick = (e) => {
+        e.preventDefault()
+        const hideClass = 'visible-md'
+        const collapseElem = document.querySelector('.collapse-md')
+        const classes = collapseElem.className
+        const btn = e.target 
+
+        if(classes.split(' ').indexOf(hideClass) > -1){
+            collapseElem.className = classes.replace(hideClass, '')
+            btn.innerHTML = 'Hide Lines'
+        }
+        else{
+            collapseElem.className += ` ${hideClass}`
+            btn.innerHTML = 'Select Lines'
+        }
     }
 
     // dev
