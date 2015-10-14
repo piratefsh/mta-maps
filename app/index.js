@@ -49,8 +49,8 @@ function initBtnCallbacks(){
     const toggleLines = document.querySelector('#toggle-lines')
     toggleLines.onclick = (e) => {
         e.preventDefault()
-        const hideClass = 'visible-md'
-        const collapseElem = document.querySelector('.collapse-md')
+        const hideClass = 'visible-sm'
+        const collapseElem = document.querySelector('.collapse-sm')
         const classes = collapseElem.className
         const btn = e.target 
 
