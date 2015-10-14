@@ -8,7 +8,7 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, 'public'),
-        publicPath: 'public/',
+        publicPath: 'mta-maps/public/',
         filename: 'bundle.js'
     },
     devtool: 'eval',
