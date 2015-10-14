@@ -27,8 +27,12 @@ export default class SubwayMap extends LMap.Map{
         this.addAllStationMarkers()
 
         // center view in East River
-        const manhattanLatLng = [40.768033, -73.942108]
+        const manhattanLatLng = [40.759123, -73.953266]
         const zoomLevel = 12
+
+        const markerBounds = this.layers['lines'][1].getBounds()
+
+        this.fitBounds(markerBounds)
         this.setView(manhattanLatLng, zoomLevel)
 
         // when to show labels by default

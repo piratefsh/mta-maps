@@ -7,6 +7,17 @@ import 'styles/style.scss'
 let map, mapControls
 
 function init(){
+    // must set size of map before initialization
+    // because .fitBounds() does not like % or vh sizes
+    const mapElem = document.querySelector('#map')
+    const mapContainerElem = document.querySelector('#map-container')
+    const rect = mapContainerElem.getBoundingClientRect()
+
+    mapElem.style.width = `${rect.width}px`
+    mapElem.style.height = `${rect.height}px`
+
+    console.log(rect)
+
     // init map and controls
     map = new HeatMap()
     mapControls = new MapControls(map)
