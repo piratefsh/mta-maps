@@ -44,7 +44,7 @@ function init(){
     }
 
     // dev
-    startAnimationElem.onclick()
+    // startAnimationElem.onclick()
 }
 
 function updateHUDTime(datetime){
