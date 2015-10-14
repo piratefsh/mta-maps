@@ -21,7 +21,7 @@ export default class HeatMap extends SubwayMap{
             '16:00:00',
             '20:00:00',
             '23:59:59']
-            
+
         this.timeFrame = 2000
         this.dayFrame = this.timeFrame * (this.timeIntervals.length-1)
     }
@@ -104,15 +104,17 @@ export default class HeatMap extends SubwayMap{
                             heats[intervals[i]].push(h)
                         }
                     }
+
                 })
             }
         }
         return heats
     }
 
-    // find index of upper bound time interval where 
+    // find index of lower/upper bound time interval, whichever is closest where 
     // list = ['00:00', '04:00', ... '20:00'] (sorted) 
-    // and time = '03:55' returns 1. uses bisection/binary search
+    // and time = '03:55' returns 1, '01:00' returns 0
+    // uses bisection/binary search
     findTimeInterval(list, time){
         if(list.length < 1 || time.length < 1){
             return -1
@@ -129,6 +131,19 @@ export default class HeatMap extends SubwayMap{
                 hi = mid
             }
         }
+        
+        // find if lower bound is closer, if there is one. 
+        // have to add date so it's parsesable by Date lib
+        if(lo > 0){
+            let actual = new Date('2015-09-09 ' + time)
+            let upper = new Date('2015-09-09 ' + list[lo])
+            let lower = new Date('2015-09-09 ' + list[lo-1])
+            // diff between this and lower
+            if(actual - lower < upper - actual){
+                return lo - 1
+            }
+        }
+
         return lo
     }
 
@@ -156,28 +171,30 @@ export default class HeatMap extends SubwayMap{
     }
 
     createHeatLayerInit(sizes, which){
-        sizes.forEach(s => {
-            const h     = this.createHeatMarker(s.unit, s.latlng, s.radius, `${s.stationName}`, which)
-            h.unit = s.unit
-            this.heatLayerRefs[s.unit] = h
-
-            const lines = s.lineName.split("")
-
-            // add layer by lines 
-            lines.forEach(l => {
-                const layers = this.layers[which]
-                if (l in layers){
-                    layers[l].addLayer(h)
-                }
-                else{
-                    layers[l] = this.L.featureGroup([h])
-                }
-            })
-
-        })
+        sizes.forEach(s => { this.initHeatLayer(s, which)} )
+        
         this.eachHeatLayer(which, (ln, l) => {
             l.addTo(this)
         })
+    }
+
+    initHeatLayer(s, which){
+        const h     = this.createHeatMarker(s.unit, s.latlng, s.radius, `${s.stationName}`, which)
+        h.unit = s.unit
+        this.heatLayerRefs[s.unit] = h
+
+        const lines = s.lineName.split("")
+
+        // add layer by lines 
+        lines.forEach(l => {
+            const layers = this.layers[which]
+            if (l in layers){
+                layers[l].addLayer(h)
+            }
+            else{
+                layers[l] = this.L.featureGroup([h])
+            }
+        });
     }
 
     // for each layer in this. which = entries|exits
@@ -201,6 +218,11 @@ export default class HeatMap extends SubwayMap{
                 this.updateMarker(elemEnt, s, 'entries')
                 this.updateMarker(elemExt, s, 'exits')
                 
+            }
+            // if doesn't exist yet, create layer
+            else{
+                this.initHeatLayer(s, 'entries')
+                this.initHeatLayer(s, 'exits')
             }
         })
     }

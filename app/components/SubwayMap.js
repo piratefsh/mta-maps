@@ -107,7 +107,7 @@ export default class SubwayMap extends LMap.Map{
             const latlng = [s.coords.lat, s.coords.lng]
             const lines = this.lineToIcons(s.line_name)
 
-            const popupContent = `<div class='map-popup'><span class='title'>${s.station_name}</span>${lines}</div>`
+            const popupContent = `<div class='map-popup'><span class='title'>${s.station_name} <small class='unit'>${unit}</small></span>${lines}</div>`
             const popup = this.createPopUp(latlng, popupContent)
 
             const station_name = `${s.station_name}`
