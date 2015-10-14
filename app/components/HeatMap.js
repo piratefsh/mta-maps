@@ -13,7 +13,6 @@ export default class HeatMap extends SubwayMap{
         this.radiusRatio = 15/max
         this.minRadius = 2
 
-        this.dayFrame = 6000
         this.timeIntervals = [
             '00:00:00', 
             '04:00:00', 
@@ -22,6 +21,8 @@ export default class HeatMap extends SubwayMap{
             '16:00:00',
             '20:00:00',
             '23:59:59']
+        this.timeFrame = 2000
+        this.dayFrame = this.timeFrame * (this.timeIntervals.length-1)
     }
 
     heat(options, onDoneInterval){
@@ -135,7 +136,7 @@ export default class HeatMap extends SubwayMap{
     createHeatLayer(date, which, onDone){
         const sizes = this.generateHeatSizes(date, which)
 
-        let frameLen = 1000
+        let frameLen = this.timeFrame
         let counter = frameLen
 
         for(let time in sizes){

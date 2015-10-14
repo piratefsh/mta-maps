@@ -9,10 +9,10 @@ export default class MapControls{
         }
 
         this.map.eachLineLayer(r)
-        this.map.eachHeatLayer(r)
+        this.map.eachHeatLayer('entries', r)
+        this.map.eachHeatLayer('exits', r)
 
         const f = (linename,layer) => {
-            // console.log(linename, layer)
             lines.forEach(l => {
                 if(linename.indexOf(l) > -1){
                     layer.addTo(this.map).bringToFront()
@@ -22,5 +22,6 @@ export default class MapControls{
 
         this.map.eachLineLayer(f)
         this.map.eachHeatLayer('entries', f)
+        this.map.eachHeatLayer('exits', f)
     }
 }
