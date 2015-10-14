@@ -16,8 +16,6 @@ function init(){
     mapElem.style.width = `${rect.width}px`
     mapElem.style.height = `${rect.height}px`
 
-    console.log(rect)
-
     // init map and controls
     map = new HeatMap()
     mapControls = new MapControls(map)
@@ -78,10 +76,14 @@ function initSubwayLineControlBatch(selectAll){
                 checkboxes.push(checkAllElem)
                 check = false
             }
-            checkboxes.forEach(cb => cb.checked = check)
 
-            // trigger map update
-            checkboxes[0].onchange()
+            if(checkboxes.length > 0){
+                checkboxes.forEach(cb => cb.checked = check)
+
+                // trigger map update
+                const event = new Event('change')
+                checkboxes[0].dispatchEvent(event)
+            }
         }
     })
 

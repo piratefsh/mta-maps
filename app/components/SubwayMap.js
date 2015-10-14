@@ -26,17 +26,41 @@ export default class SubwayMap extends LMap.Map{
         this.setCallbacks()
         this.addAllStationMarkers()
 
-        // center view in East River
-        const manhattanLatLng = [40.759123, -73.953266]
-        const zoomLevel = 12
-
-        const markerBounds = this.layers['lines'][1].getBounds()
-
-        this.fitBounds(markerBounds)
-        this.setView(manhattanLatLng, zoomLevel)
+        this.addCustomControls()
+        this.setCustomView()
 
         // when to show labels by default
         this.zoomThresholdForLabel = 13
+
+    }
+
+    setCustomView(){
+        // center view in manhattan
+        const manhattanLatLng = [40.759123, -73.953266]
+        const zoomLevel = 12
+
+        const markerBounds = this.layers['lines']['A'].getBounds()
+
+        this.fitBounds(markerBounds)
+        this.setView(manhattanLatLng, zoomLevel)
+    }
+
+    addCustomControls(){
+        let SubwayControls = this.L.Control.extend({
+            options: {
+                position: 'topleft'
+            },
+            onAdd: (map) => {
+                let container = this.L.DomUtil.create('div', 'control-fit-markers')
+                L.DomEvent.addListener(container, 'click', L.DomEvent.stopPropagation)
+                    .addListener(container, 'click', L.DomEvent.preventDefault)
+                    .addListener(container, 'click', () => {
+                        console.log('click')
+                        this.setCustomView()})
+                return container
+            }
+        })
+        this.addControl(new SubwayControls())
     }
 
     setCallbacks(){

@@ -1,4 +1,4 @@
-.map-container, #map
+#map-container, #map
     width: 100%
     height: 100vh
 
@@ -67,6 +67,17 @@
         border: none
 .leaflet-popup
     z-index: 9
+
+.control-fit-markers
+    $size: 26px
+    width: $size 
+    height: $size 
+    border: 1px solid #dddddd
+    background-color: #fefefe 
+    cursor: auto
+    border-radius: 3px
+    margin-left: 10px 
+
 
 path.leaflet-clickable
     transition: d 0.2s
