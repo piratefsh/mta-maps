@@ -2,6 +2,7 @@ import Mapbox from './Mapbox'
 import LMap from 'mapbox.js/src/map.js'
 import StationData from '!json!files/stations.json'
 import SubwayLines from './SubwayLines'
+import 'font-awesome/scss/font-awesome.scss'
 
 const L = Mapbox()
 
@@ -27,6 +28,8 @@ export default class SubwayMap extends LMap.Map{
         this.addAllStationMarkers()
 
         this.addCustomControls()
+        this.markerBounds = this.layers['lines']['A'].getBounds()
+
         this.setCustomView()
 
         // when to show labels by default
@@ -38,11 +41,8 @@ export default class SubwayMap extends LMap.Map{
         // center view in manhattan
         const manhattanLatLng = [40.759123, -73.953266]
         const zoomLevel = 12
-
-        const markerBounds = this.layers['lines']['A'].getBounds()
-
-        this.fitBounds(markerBounds)
-        this.setView(manhattanLatLng, zoomLevel)
+        this.fitBounds(this.markerBounds)
+        // this.setView(manhattanLatLng, zoomLevel)
     }
 
     addCustomControls(){
@@ -52,10 +52,14 @@ export default class SubwayMap extends LMap.Map{
             },
             onAdd: (map) => {
                 let container = this.L.DomUtil.create('div', 'control-fit-markers')
+                container.innerHTML = '<a href=""><i class="fa fa-arrows"></i></a>'
                 L.DomEvent.addListener(container, 'click', L.DomEvent.stopPropagation)
+                    .addListener(container, 'dblclick', L.DomEvent.stopPropagation)
                     .addListener(container, 'click', L.DomEvent.preventDefault)
+                    .addListener(container, 'dblclick', L.DomEvent.preventDefault)
                     .addListener(container, 'click', () => {
-                        console.log('click')
+                        this.setCustomView()})
+                    .addListener(container, 'dblclick', () => {
                         this.setCustomView()})
                 return container
             }
