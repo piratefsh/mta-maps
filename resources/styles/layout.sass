@@ -14,7 +14,8 @@ $sm-width: 768px
     height: 100%
     .title 
         margin-top: 0px
-
+    #toggle-lines
+        margin-right: $space/2
     #subway-lines
         padding-left: 0px
         margin-top: $space
@@ -26,8 +27,12 @@ $sm-width: 768px
             @media(max-width: $sm-width)
                 display: inline-block
                 margin-right: $space
+            input, label
+                opacity: 0.4
             label 
                 padding-left: $space/3
+            input:checked + label, input:checked 
+                opacity: 1
 
 .hud 
     position: absolute
@@ -39,6 +44,7 @@ $sm-width: 768px
     background: radial-gradient(at top right,rgba(black,1) 0%,rgba(black,0) 80%);
     height: 100px
     .datetime-display
+        max-width: 200px
         text-shadow: 1px 1px 1px black
         text-align: right
         margin-top: $space/2

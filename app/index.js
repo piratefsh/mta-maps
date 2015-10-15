@@ -7,14 +7,9 @@ import 'styles/style.scss'
 let map, mapControls
 
 function init(){
-    // must set size of map before initialization
-    // because .fitBounds() does not like % or vh sizes
-    const mapElem = document.querySelector('#map')
-    const mapContainerElem = document.querySelector('#map-container')
-    const rect = mapContainerElem.getBoundingClientRect()
+    initMapSize()
 
-    mapElem.style.width = `${rect.width}px`
-    mapElem.style.height = `${rect.height}px`
+    window.onresize = initMapSize
 
     // init map and controls
     map = new HeatMap()
@@ -36,6 +31,17 @@ function init(){
     initBtnCallbacks()
 }
 
+function initMapSize(){
+    // must set size of map before initialization
+    // because .fitBounds() does not like % or vh sizes
+    const mapElem = document.querySelector('#map')
+    const mapContainerElem = document.querySelector('#map-container')
+    const rect = mapContainerElem.getBoundingClientRect()
+
+    mapElem.style.width = `${rect.width}px`
+    mapElem.style.height = `${rect.height}px`
+}
+
 function initBtnCallbacks(){
     // callback on start button
     const startAnimationElem = document.querySelector('#start-animation')
@@ -49,7 +55,7 @@ function initBtnCallbacks(){
     const toggleLines = document.querySelector('#toggle-lines')
     toggleLines.onclick = (e) => {
         e.preventDefault()
-        const hideClass = 'visible-sm'
+        const hideClass = 'hidden-xs'
         const collapseElem = document.querySelector('.collapse-sm')
         const classes = collapseElem.className
         const btn = e.target 
