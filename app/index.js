@@ -87,7 +87,7 @@ function initSubwayLineControlBatch(selectAll){
 
 
     Array.prototype.forEach.call(controls, c => {
-        c.onchange = (e) => {
+        c.onchange = e => {
             const val = e.target.value 
             
             let checkboxes = []

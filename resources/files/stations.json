@@ -748,17 +748,6 @@
             "line_name": "3",
             "station_name": "NEW LOTS AVE"
         },
-        "R070": {
-            "color": "#EE352E",
-            "control_area": "S101A",
-            "coords": {
-                "lat": 40.643738,
-                "lng": -74.073622
-            },
-            "division": "SRT",
-            "line_name": "1",
-            "station_name": "ST. GEORGE"
-        },
         "R072": {
             "color": "#B933AD",
             "control_area": "R550",
@@ -1726,17 +1715,6 @@
             "division": "IRT",
             "line_name": "1",
             "station_name": "66 ST-LINCOLN"
-        },
-        "R165": {
-            "color": "#EE352E",
-            "control_area": "S102",
-            "coords": {
-                "lat": 40.636948,
-                "lng": -74.074824
-            },
-            "division": "SRT",
-            "line_name": "1",
-            "station_name": "TOMPKINSVILLE"
         },
         "R166": {
             "color": "#EE352E",
@@ -5065,17 +5043,6 @@
             "line_name": "R",
             "station_name": "RIT-ROOSEVELT"
         },
-        "R470": {
-            "color": "#996633",
-            "control_area": "X002",
-            "coords": {
-                "lat": 40.5446,
-                "lng": -74.164581
-            },
-            "division": "SRT",
-            "line_name": "Z",
-            "station_name": "ELTINGVILLE PK"
-        },
         "R526": {
             "color": "#FF6319",
             "control_area": "LI001",
@@ -5139,143 +5106,6 @@
             "division": "IRT",
             "line_name": "7",
             "station_name": "LGA AIRPORT CTB"
-        },
-        "R540": {
-            "color": "#EE352E",
-            "control_area": "PTH21",
-            "coords": {
-                "lat": 40.711638,
-                "lng": -74.010708
-            },
-            "division": "PTH",
-            "line_name": "1",
-            "station_name": "PATH WTC 2"
-        },
-        "R541": {
-            "color": "#EE352E",
-            "control_area": "PTH13",
-            "coords": {},
-            "division": "PTH",
-            "lat": "",
-            "line_name": "1",
-            "lng": "",
-            "station_name": "THIRTY ST"
-        },
-        "R542": {
-            "color": "#EE352E",
-            "control_area": "PTH12",
-            "coords": {
-                "lat": 40.742933,
-                "lng": -73.992909
-            },
-            "division": "PTH",
-            "line_name": "1",
-            "station_name": "TWENTY THIRD ST"
-        },
-        "R543": {
-            "color": "#EE352E",
-            "control_area": "PTH05",
-            "coords": {
-                "lat": 40.716737,
-                "lng": -74.033024
-            },
-            "division": "PTH",
-            "line_name": "1",
-            "station_name": "EXCHANGE PLACE"
-        },
-        "R544": {
-            "color": "#EE352E",
-            "control_area": "PTH02",
-            "coords": {
-                "lat": 40.738879,
-                "lng": -74.155533
-            },
-            "division": "PTH",
-            "line_name": "1",
-            "station_name": "HARRISON"
-        },
-        "R545": {
-            "color": "#EE352E",
-            "control_area": "PTH11",
-            "coords": {
-                "lat": 40.737434,
-                "lng": -73.996785
-            },
-            "division": "PTH",
-            "line_name": "1",
-            "station_name": "14TH STREET"
-        },
-        "R546": {
-            "color": "#EE352E",
-            "control_area": "PTH06",
-            "coords": {},
-            "division": "PTH",
-            "lat": "",
-            "line_name": "1",
-            "lng": "",
-            "station_name": "PAVONIA/NEWPORT"
-        },
-        "R547": {
-            "color": "#EE352E",
-            "control_area": "PTH10",
-            "coords": {},
-            "division": "PTH",
-            "lat": "",
-            "line_name": "1",
-            "lng": "",
-            "station_name": "9TH STREET"
-        },
-        "R548": {
-            "color": "#EE352E",
-            "control_area": "PTH09",
-            "coords": {},
-            "division": "PTH",
-            "lat": "",
-            "line_name": "1",
-            "lng": "",
-            "station_name": "CHRISTOPHER ST"
-        },
-        "R549": {
-            "color": "#EE352E",
-            "control_area": "PTH20",
-            "coords": {},
-            "division": "PTH",
-            "lat": "",
-            "line_name": "1",
-            "lng": "",
-            "station_name": "NEWARK HM HE"
-        },
-        "R550": {
-            "color": "#EE352E",
-            "control_area": "PTH16",
-            "coords": {},
-            "division": "PTH",
-            "lat": "",
-            "line_name": "1",
-            "lng": "",
-            "station_name": "LACKAWANNA"
-        },
-        "R551": {
-            "color": "#EE352E",
-            "control_area": "PTH04",
-            "coords": {
-                "lat": 40.719876,
-                "lng": -74.042616
-            },
-            "division": "PTH",
-            "line_name": "1",
-            "station_name": "GROVE STREET"
-        },
-        "R552": {
-            "color": "#EE352E",
-            "control_area": "PTH03",
-            "coords": {
-                "lat": 40.732102,
-                "lng": -74.063915
-            },
-            "division": "PTH",
-            "line_name": "1",
-            "station_name": "JOURNAL SQUARE"
         }
     }
 }

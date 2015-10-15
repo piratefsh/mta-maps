@@ -14,13 +14,13 @@ export default class SubwayMap extends LMap.Map{
         this.L = Mapbox()
         this.subwayLines = new SubwayLines()
         this.stations = StationData.stations
+        
         // layers and markers
         this.layers = {
             'lines': {},
             'entries': {},
             'exits': {}
         }
-
         this.markers = []
         this.stationNames = []
 
@@ -40,8 +40,7 @@ export default class SubwayMap extends LMap.Map{
         const manhattanLatLng = [40.759123, -73.953266]
         const zoomLevel = 12
         this.fitBounds(this.markerBounds)
-        this.setZoom(zoomLevel)
-        // this.setView(manhattanLatLng, zoomLevel)
+        this.setView(manhattanLatLng, zoomLevel)
     }
 
     addCustomControls(){
