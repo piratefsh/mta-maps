@@ -5539,7 +5539,13 @@ input[type="button"].btn-block {
 
 .col-sidebar, .row-container {
   background-color: #2E2E2E;
-  color: #eeeeee; }
+  color: #eeeeee;
+  max-height: 100vh;
+  overflow-y: scroll; }
+
+.col-main {
+  padding-left: 0px;
+  padding-right: 0px; }
 
 .sidebar {
   padding: 20px;
