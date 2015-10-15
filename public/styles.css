@@ -5547,6 +5547,8 @@ input[type="button"].btn-block {
   height: 100%; }
   .sidebar .title {
     margin-top: 0px; }
+  .sidebar #toggle-lines {
+    margin-right: 10px; }
   .sidebar #subway-lines {
     padding-left: 0px;
     margin-top: 20px;
@@ -5559,8 +5561,12 @@ input[type="button"].btn-block {
         .sidebar #subway-lines fieldset {
           display: inline-block;
           margin-right: 20px; } }
+      .sidebar #subway-lines fieldset input, .sidebar #subway-lines fieldset label {
+        opacity: 0.4; }
       .sidebar #subway-lines fieldset label {
         padding-left: 6.66667px; }
+      .sidebar #subway-lines fieldset input:checked + label, .sidebar #subway-lines fieldset input:checked {
+        opacity: 1; }
 
 .hud {
   position: absolute;
@@ -5571,6 +5577,7 @@ input[type="button"].btn-block {
   background: radial-gradient(at top right, black 0%, transparent 80%);
   height: 100px; }
   .hud .datetime-display {
+    max-width: 200px;
     text-shadow: 1px 1px 1px black;
     text-align: right;
     margin-top: 10px;
@@ -5581,7 +5588,8 @@ input[type="button"].btn-block {
 
 #map-container, #map {
   width: 100%;
-  height: 100vh; }
+  height: 100vh;
+  background-color: #444444; }
 
 .map-popup {
   min-width: 100px; }
@@ -5611,9 +5619,11 @@ input[type="button"].btn-block {
   transition: all 2s; }
   .heat-icon.heat-icon-entries {
     background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.3); }
   .heat-icon.heat-icon-exits {
     background-color: rgba(255, 0, 0, 0.2);
+    box-shadow: 0px 0px 5px rgba(255, 0, 0, 0.5);
     border: 1px solid rgba(255, 0, 0, 0.3); }
 
 .heat-transition-enter {
