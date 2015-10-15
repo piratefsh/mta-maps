@@ -6,6 +6,8 @@ import DomUtils from './utils/DomUtils'
 import 'styles/style.scss' 
 
 let map, mapControls
+const startDate = '2015-09-28 GMT-04:00'
+const endDate = '2015-10-04 GMT-04:00'
 
 function init(){
     initMapSize()
@@ -30,26 +32,10 @@ function init(){
     // init batch controls
     initSubwayLineControlBatch(true)
 
-    const hideLinesInput = document.querySelector('#show-lines-control')
-    DomUtils.initToggle(hideLinesInput, {
-        state: () => hideLinesInput.checked,
-        on: {
-            text: 'Show Stations',
-            callback: () => {
-                const lines = getSelectedLines()
-                mapControls.toggleStations(true, lines)
-            }
-        },
-        off: {
-            text: 'Show Stations',
-            callback: () => {
-                const lines = getSelectedLines()
-                mapControls.toggleStations(false, lines)
-            }
-        }
-    })
-
     initBtnCallbacks()
+
+    const datesContainer = document.querySelector('.dates')
+    datesContainer.innerHTML = `Week of ${startDate.split(' ')[0]} to ${endDate.split(' ')[0].}`
 }
 
 function initMapSize(){
@@ -69,8 +55,8 @@ function initBtnCallbacks(){
     
     startAnimationElem.onclick = (e) => {
         if(e) e.preventDefault()
-        map.heat({start: '2015-09-09 GMT-04:00', 
-            end: '2015-09-15 GMT-04:00'}, updateHUDTime)
+        map.heat({start: startDate, 
+            end: endDate}, updateHUDTime)
     }
 
     // responsive toggle stuff
@@ -138,6 +124,26 @@ function initSubwayLineControlBatch(selectAll){
     const event         = new Event('change')
     triggerElem.checked = true 
     triggerElem.dispatchEvent(event)
+
+    // hide station controls
+    const hideLinesInput = document.querySelector('#show-lines-control')
+    DomUtils.initToggle(hideLinesInput, {
+        state: () => hideLinesInput.checked,
+        on: {
+            text: 'Show Stations',
+            callback: () => {
+                const lines = getSelectedLines()
+                mapControls.toggleStations(true, lines)
+            }
+        },
+        off: {
+            text: 'Show Stations',
+            callback: () => {
+                const lines = getSelectedLines()
+                mapControls.toggleStations(false, lines)
+            }
+        }
+    })
 }
 
 // create line checkboxes
