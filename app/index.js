@@ -35,7 +35,7 @@ function init(){
     initBtnCallbacks()
 
     const datesContainer = document.querySelector('.dates')
-    datesContainer.innerHTML = `Week of ${startDate.split(' ')[0]} to ${endDate.split(' ')[0].}`
+    datesContainer.innerHTML = `Week of ${startDate.split(' ')[0]} to ${endDate.split(' ')[0]}.`
 }
 
 function initMapSize(){
