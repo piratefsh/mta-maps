@@ -14,19 +14,19 @@
                 <form id='animation-controls'>
                     <fieldset>
                         <button id='start-animation' class='btn btn-success'>Start</button> 
-                        <button id='toggle-lines' class='btn btn-default hidden-sm'>Select Lines</button> 
+                        <button id='toggle-lines' class='btn btn-default visible-xs pull-left'>Select Lines</button>
                     </fieldset>
                 </form>
-                <div class="collapse-sm visible-sm">
+                <div class="collapse-sm hidden-xs">
                     <hr/>
                     <form id='subway-lines'>
                         <fieldset>
-                            <input type="checkbox" value="check-all" class="control-subway-line-batch"/>
-                            <label>All</label>
+                            <input id='check-all' type="checkbox" value="check-all" class="control-subway-line-batch"/>
+                            <label for="check-all">All</label>
                         </fieldset>
                         <fieldset>
-                            <input type="checkbox" value="check-none" class="control-subway-line-batch"/>
-                            <label>None</label>
+                            <input id='check-none' type="checkbox" value="check-none" class="control-subway-line-batch"/>
+                            <label for='check-none'>None</label>
                         </fieldset>
                         <fieldset>
                             <input id='show-lines-control' type="checkbox" value="show-lines-control" checked='true'/>
