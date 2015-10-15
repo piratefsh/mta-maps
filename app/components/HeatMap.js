@@ -70,7 +70,8 @@ export default class HeatMap extends SubwayMap{
         for (let unit in stations){
             // check unit exists
             if(!(unit in this.stations)){
-                console.log('warning, missing station ', unit, stations[unit].station_name)
+                // debug message
+                // console.log('warning, missing station ', unit, stations[unit].station_name)
                 continue
             }
 
@@ -235,12 +236,17 @@ export default class HeatMap extends SubwayMap{
             const radius = this.getRadius(s[which])
             const scale = radius/originalSize
             const rpx = Math.floor(radius) + 'px'
+            const glowpx = Math.floor(radius)/2 + 'px'
             const marginpx = -1 * Math.floor(radius/2) + 'px'
             
             elem.style.width = rpx
             elem.style.height = rpx
             elem.style.marginLeft = marginpx
             elem.style.marginTop = marginpx
+
+            let color = 'white'
+            if(which == 'exits') color = 'red'
+            // elem.style.boxShadow = `0px 0px ${glowpx} ${color}`
         }
     }
 
@@ -248,6 +254,7 @@ export default class HeatMap extends SubwayMap{
 
         const whichClassName = which == 'entries' ? 'heat-icon-entries' : 'heat-icon-exits'
         radius = Math.floor(radius)
+        
         const icon = new this.L.icon({
             iconUrl: heatCirclePng,
             iconRetinaUrl: heatCirclePng,

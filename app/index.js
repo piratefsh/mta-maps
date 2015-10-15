@@ -2,6 +2,7 @@ import test from './test'
 import HeatMap from './components/HeatMap'
 import MapControls from './components/MapControls'
 import SubwayLines from './components/SubwayLines'
+import DomUtils from './utils/DomUtils'
 import 'styles/style.scss' 
 
 let map, mapControls
@@ -22,12 +23,32 @@ function init(){
 
     for(let lines in subwayLines){
         const icons = subwayLines[lines]
-        const fs = createControlFieldset(icons,lines)
+        const fs = initSubwayLineControl(icons,lines)
         subwayListElem.appendChild(fs)
     }
 
     // init batch controls
     initSubwayLineControlBatch(true)
+
+    const hideLinesInput = document.querySelector('#show-lines-control')
+    DomUtils.initToggle(hideLinesInput, {
+        state: () => hideLinesInput.checked,
+        on: {
+            text: 'Show Stations',
+            callback: () => {
+                const lines = getSelectedLines()
+                mapControls.toggleStations(true, lines)
+            }
+        },
+        off: {
+            text: 'Show Stations',
+            callback: () => {
+                const lines = getSelectedLines()
+                mapControls.toggleStations(false, lines)
+            }
+        }
+    })
+
     initBtnCallbacks()
 }
 
@@ -45,14 +66,16 @@ function initMapSize(){
 function initBtnCallbacks(){
     // callback on start button
     const startAnimationElem = document.querySelector('#start-animation')
+    
     startAnimationElem.onclick = (e) => {
         if(e) e.preventDefault()
         map.heat({start: '2015-09-09 GMT-04:00', 
             end: '2015-09-15 GMT-04:00'}, updateHUDTime)
     }
 
-    // responsive toggle stufff
+    // responsive toggle stuff
     const toggleLines = document.querySelector('#toggle-lines')
+    
     toggleLines.onclick = (e) => {
         e.preventDefault()
         const hideClass = 'hidden-xs'
@@ -61,12 +84,12 @@ function initBtnCallbacks(){
         const btn = e.target 
 
         if(classes.split(' ').indexOf(hideClass) > -1){
-            collapseElem.className = classes.replace(hideClass, '')
-            btn.innerHTML = 'Hide Lines'
+            collapseElem.className  = classes.replace(hideClass, '')
+            btn.innerHTML           = 'Hide Lines'
         }
         else{
-            collapseElem.className += ` ${hideClass}`
-            btn.innerHTML = 'Select Lines'
+            collapseElem.className  += ` ${hideClass}`
+            btn.innerHTML           = 'Select Lines'
         }
     }
 
@@ -74,11 +97,7 @@ function initBtnCallbacks(){
     // startAnimationElem.onclick()
 }
 
-function updateHUDTime(datetime){
-    const datetimeDisplayElem = document.querySelector('.datetime-display')
-    datetimeDisplayElem.innerHTML = datetime.toString()
-}
-
+// show/hide subway lines
 function initSubwayLineControlBatch(selectAll){
     const controls = document.querySelectorAll('.control-subway-line-batch')
     const batchClass = '.control-subway-line'
@@ -115,38 +134,50 @@ function initSubwayLineControlBatch(selectAll){
     })
 
     // trigger initial check
-    const triggerElem = selectAll? checkAllElem : checkNoneElem
-    const event = new Event('change')
+    const triggerElem   = selectAll? checkAllElem : checkNoneElem
+    const event         = new Event('change')
     triggerElem.checked = true 
     triggerElem.dispatchEvent(event)
 }
 
+// create line checkboxes
+function initSubwayLineControl(icon, line){
+    const fs = document.createElement('fieldset')
+    const cb = document.createElement('input')
+    cb.setAttribute('type', 'checkbox')
+    cb.setAttribute('id', `subway-line-${line}`)
+    cb.setAttribute('class', 'control-subway-line')
+    cb.value    = `${line}`
+    cb.onchange = onSubwayLineControlClick
+
+    const lbl       = document.createElement('label')
+    lbl.innerHTML   = `${icon}`
+    lbl.setAttribute('for', `subway-line-${line}`)
+    fs.appendChild(cb)
+    fs.appendChild(lbl)
+    return fs
+}
+
 function onSubwayLineControlClick(e){
     // get all checked
+    mapControls.showLines(getSelectedLines())
+}
+
+function getSelectedLines(){
     let checked = document.querySelectorAll('.control-subway-line:checked')
     const selectedStations = Array.prototype.map.call(checked, line => line.value)
     const indivStations = selectedStations.reduce((prev, elem) => {
         prev.push(...elem.split(""))
         return prev
     }, [])
-    mapControls.showLines(indivStations)
+    return indivStations
 }
 
-function createControlFieldset(icon, line){
-    const fs = document.createElement('fieldset')
-    const cb = document.createElement('input')
-    cb.setAttribute('type', 'checkbox')
-    cb.setAttribute('id', `subway-line-${line}`)
-    cb.setAttribute('class', 'control-subway-line')
-    cb.value = `${line}`
-    cb.onchange = onSubwayLineControlClick
 
-    const lbl = document.createElement('label')
-    lbl.innerHTML = `${icon}`
-    lbl.setAttribute('for', `subway-line-${line}`)
-    fs.appendChild(cb)
-    fs.appendChild(lbl)
-    return fs
+function updateHUDTime(datetime){
+    const datetimeDisplayElem       = document.querySelector('.datetime-display')
+    datetimeDisplayElem.innerHTML   = datetime.toString()
 }
+
 
 init()
