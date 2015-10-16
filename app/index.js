@@ -10,8 +10,8 @@ let map, mapControls
 
 function init(){
     const startDate = '2015-09-28 00:00:00 GMT-04:00'
-    const endDate = '2015-09-29 23:59:59 GMT-04:00'
-    // const endDate = '2015-10-04 23:59:59 GMT-04:00'
+    // const endDate = '2015-09-29 23:59:59 GMT-04:00'
+    const endDate = '2015-10-04 23:59:59 GMT-04:00'
 
     // must set size of map before initialization because .fitBounds() 
     // does not like % or vh sizes
