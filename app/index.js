@@ -2,17 +2,20 @@ import test from './test'
 import HeatMap from './components/HeatMap'
 import MapControls from './components/MapControls'
 import SubwayLines from './components/SubwayLines'
-import DomUtils from './utils/DomUtils'
+import ui from './ui/UiControls'
+import cb from './ui/UiCallbacks'
 import 'styles/style.scss' 
 
 let map, mapControls
-const startDate = '2015-09-28 GMT-04:00'
-const endDate = '2015-10-04 GMT-04:00'
 
 function init(){
-    initMapSize()
+    const startDate = '2015-09-28 GMT-04:00'
+    const endDate = '2015-10-04 GMT-04:00'
 
-    window.onresize = initMapSize
+    // must set size of map before initialization
+    // because .fitBounds() does not like % or vh sizes
+    ui.initMapSize()
+    window.onresize = ui.initMapSize
 
     // init map and controls
     map = new HeatMap()
@@ -25,193 +28,38 @@ function init(){
 
     for(let lines in subwayLines){
         const icons = subwayLines[lines]
-        const fs = initSubwayLineControl(icons,lines)
+        const fs = cb.initSubwayLineControl(mapControls, icons,lines)
         subwayListElem.appendChild(fs)
     }
 
+    cb.initSubwayLineControlBatch(true, mapControls)
+    cb.setResponsiveCallbacks()
+    ui.drawTimeline(startDate, endDate)
+    ui.setDates(startDate, endDate)
+
     // init batch controls
-    initSubwayLineControlBatch(true)
-
-    initBtnCallbacks()
-
-    const datesContainer = document.querySelector('.dates')
-    datesContainer.innerHTML = `Week of ${startDate.split(' ')[0]} to ${endDate.split(' ')[0]}.`
-
-    drawTimeline()
+    initStartAnimationBtnCallbacks(startDate, endDate)
 }
 
-function drawTimeline(){
-    const days = "Sun Mon Tue Wed Thu Fri Sat".split(' ')
-    const months = "Jan Feb Mar Apr May Jun Jul Aug Sept Oct Nov Dec".split(' ')
-    const timelineElem = document.querySelector('.timeline')
-    const start = new Date(Date.parse(startDate))
-    const end = new Date(Date.parse(endDate))
-    let curr = start
-    while (curr <= end){
-        let d = document.createElement('li')
-        let f = `${days[curr.getDay()]}, ${months[curr.getMonth()]} ${curr.getDate()}`
-        d.innerHTML = f
 
-        // if weekend
-        if(curr.getDay() == 0 || curr.getDay() == 6){
-            d.className = 'weekend'
-        }
-        timelineElem.appendChild(d)
-        curr.setDate(curr.getDate() + 1)
-    }
-}
-
-function initMapSize(){
-    // must set size of map before initialization
-    // because .fitBounds() does not like % or vh sizes
-    const mapElem = document.querySelector('#map')
-    const mapContainerElem = document.querySelector('#map-container')
-    const rect = mapContainerElem.getBoundingClientRect()
-
-    mapElem.style.width = `${rect.width}px`
-    mapElem.style.height = `${rect.height}px`
-}
-
-function initBtnCallbacks(){
+function initStartAnimationBtnCallbacks(startDate, endDate){
     // callback on start button
     const startAnimationElem = document.querySelector('#start-animation')
     
     startAnimationElem.onclick = (e) => {
         if(e) e.preventDefault()
-        const time = map.heat({start: startDate, 
-            end: endDate}, updateHUDTime)
+        const intervalPromises = map.heat({start: startDate, 
+            end: endDate})
 
-        const cursor = document.querySelector('.timeline-cursor')
-        cursor.style.transitionDelay = "2s"
-        cursor.style.transition = `width ${time/1000}s linear`
-        cursor.className += ' active'
-    }
-
-    // responsive toggle stuff
-    const toggleLines = document.querySelector('#toggle-lines')
-    
-    toggleLines.onclick = (e) => {
-        e.preventDefault()
-        const hideClass = 'hidden-xs'
-        const collapseElem = document.querySelector('.collapse-sm')
-        const classes = collapseElem.className
-        const btn = e.target 
-
-        if(classes.split(' ').indexOf(hideClass) > -1){
-            collapseElem.className  = classes.replace(hideClass, '')
-            btn.innerHTML           = 'Hide Lines'
-        }
-        else{
-            collapseElem.className  += ` ${hideClass}`
-            btn.innerHTML           = 'Select Lines'
+        for (let p of intervalPromises){
+            p.then((datetime)=>{
+                ui.updateHUDTime(datetime)
+                ui.updateTimeline(datetime)
+            })
         }
     }
-
     // dev
     // startAnimationElem.onclick()
 }
-
-// show/hide subway lines
-function initSubwayLineControlBatch(selectAll){
-    const controls = document.querySelectorAll('.control-subway-line-batch')
-    const batchClass = '.control-subway-line'
-    const checkAllElem = document.querySelector(`input[value="check-all"]`)
-    const checkNoneElem = document.querySelector(`input[value="check-none"]`)
-
-
-    Array.prototype.forEach.call(controls, c => {
-        c.onchange = e => {
-            const val = e.target.value 
-            
-            let checkboxes = []
-            let check = true
-
-            if(val === 'check-all'){
-                checkboxes.push(...document.querySelectorAll(`${batchClass}:not(:checked)`))
-                checkNoneElem.checked = false
-                check = true
-            }
-            else if(val === 'check-none'){
-                checkboxes.push(...document.querySelectorAll(`${batchClass}:checked`))
-                checkboxes.push(checkAllElem)
-                check = false
-            }
-
-            if(checkboxes.length > 0){
-                checkboxes.forEach(cb => cb.checked = check)
-
-                // trigger map update
-                const event = new Event('change')
-                checkboxes[0].dispatchEvent(event)
-            }
-        }
-    })
-
-    // trigger initial check
-    const triggerElem   = selectAll? checkAllElem : checkNoneElem
-    const event         = new Event('change')
-    triggerElem.checked = true 
-    triggerElem.dispatchEvent(event)
-
-    // hide station controls
-    const hideLinesInput = document.querySelector('#show-lines-control')
-    DomUtils.initToggle(hideLinesInput, {
-        state: () => hideLinesInput.checked,
-        on: {
-            text: 'Show Stations',
-            callback: () => {
-                const lines = getSelectedLines()
-                mapControls.toggleStations(true, lines)
-            }
-        },
-        off: {
-            text: 'Show Stations',
-            callback: () => {
-                const lines = getSelectedLines()
-                mapControls.toggleStations(false, lines)
-            }
-        }
-    })
-}
-
-// create line checkboxes
-function initSubwayLineControl(icon, line){
-    const fs = document.createElement('fieldset')
-    const cb = document.createElement('input')
-    cb.setAttribute('type', 'checkbox')
-    cb.setAttribute('id', `subway-line-${line}`)
-    cb.setAttribute('class', 'control-subway-line')
-    cb.value    = `${line}`
-    cb.onchange = onSubwayLineControlClick
-
-    const lbl       = document.createElement('label')
-    lbl.innerHTML   = `${icon}`
-    lbl.setAttribute('for', `subway-line-${line}`)
-    fs.appendChild(cb)
-    fs.appendChild(lbl)
-    return fs
-}
-
-function onSubwayLineControlClick(e){
-    // get all checked
-    mapControls.showLines(getSelectedLines())
-}
-
-function getSelectedLines(){
-    let checked = document.querySelectorAll('.control-subway-line:checked')
-    const selectedStations = Array.prototype.map.call(checked, line => line.value)
-    const indivStations = selectedStations.reduce((prev, elem) => {
-        prev.push(...elem.split(""))
-        return prev
-    }, [])
-    return indivStations
-}
-
-
-function updateHUDTime(datetime){
-    const datetimeDisplayElem       = document.querySelector('.datetime-display')
-    datetimeDisplayElem.innerHTML   = datetime.toString()
-}
-
 
 init()
