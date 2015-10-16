@@ -3192,11 +3192,11 @@ textarea {
   line-height: inherit; }
 
 a {
-  color: #337ab7;
+  color: #777777;
   text-decoration: none; }
   a:hover,
   a:focus {
-    color: #23527c;
+    color: #515151;
     text-decoration: underline; }
   a:focus {
     outline: thin dotted;
@@ -5265,7 +5265,7 @@ fieldset[disabled] a.btn {
     background-color: #fff; }
 
 .btn-link {
-  color: #337ab7;
+  color: #777777;
   font-weight: normal;
   border-radius: 0; }
   .btn-link,
@@ -5283,7 +5283,7 @@ fieldset[disabled] a.btn {
     border-color: transparent; }
   .btn-link:hover,
   .btn-link:focus {
-    color: #23527c;
+    color: #515151;
     text-decoration: underline;
     background-color: transparent; }
   .btn-link[disabled]:hover,
@@ -5545,7 +5545,8 @@ input[type="button"].btn-block {
 
 .col-main {
   padding-left: 0px;
-  padding-right: 0px; }
+  padding-right: 0px;
+  position: relative; }
 
 .sidebar {
   padding: 20px;
@@ -5591,6 +5592,40 @@ input[type="button"].btn-block {
     font-size: 1em;
     font-weight: bold;
     font-family: 'Monaco', 'monospace'; }
+
+.timeline-container {
+  z-index: 9999;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  margin: 40px 0px; }
+  .timeline-container ul.timeline {
+    position: relative;
+    padding: 0px 10px;
+    margin: 0px;
+    list-style: none;
+    display: flex;
+    font-size: 0.8em; }
+    .timeline-container ul.timeline li {
+      position: relative;
+      z-index: 1;
+      color: #aaaaaa;
+      flex: 1;
+      text-align: center; }
+      .timeline-container ul.timeline li:not(:last-child) {
+        border-right: 1px solid #aaaaaa; }
+      .timeline-container ul.timeline li.weekend {
+        color: #f6f6f6; }
+    .timeline-container ul.timeline .timeline-cursor {
+      transition: width 2s;
+      position: absolute;
+      z-index: 0;
+      width: 0px;
+      height: 1.5em;
+      background-color: rgba(238, 238, 238, 0.5); }
+      .timeline-container ul.timeline .timeline-cursor.active {
+        transition-delay: 4s;
+        width: 100%; }
 
 #map-container, #map {
   width: 100%;
