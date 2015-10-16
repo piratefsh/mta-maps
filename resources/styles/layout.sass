@@ -66,14 +66,14 @@ $sm-width: 768px
     bottom: 0px
     width: 100%
     padding: $space
-    .timeline 
+    ul.timeline 
         position: relative
         // background-color: rgba(#333333, 0.8)
-        margin: $space/2
+        margin: $space 0px
         list-style: none 
         display: flex
         font-size: 0.8em
-        margin: 0px
+        padding-left: 0px
         $text-color: #aaaaaa
         li 
             position: relative
@@ -86,6 +86,7 @@ $sm-width: 768px
             &.weekend 
                 color: lighten($text-color, 30%)
         .timeline-cursor
+            transition: width 2s
             position: absolute
             z-index: 0
             width: 0px

@@ -28,7 +28,7 @@ export default {
     },
 
     // show/hide subway lines
-    initSubwayLineControlBatch(selectAll, mapControls){
+    setSubwayLineControlBatch(selectAll, mapControls){
         const controls = document.querySelectorAll('.control-subway-line-batch')
         const batchClass = '.control-subway-line'
         const checkAllElem = document.querySelector(`input[value="check-all"]`)
@@ -91,7 +91,7 @@ export default {
     },
 
     // create line checkboxes
-    initSubwayLineControl(mapControls, icon, line){
+    setSubwayLineControl(mapControls, icon, line){
         const fs = document.createElement('fieldset')
         const cb = document.createElement('input')
         cb.setAttribute('type', 'checkbox')
@@ -107,7 +107,4 @@ export default {
         fs.appendChild(lbl)
         return fs
     }
-
-
-   
 }
