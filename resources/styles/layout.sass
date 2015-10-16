@@ -13,6 +13,7 @@ $sm-width: 768px
 .col-main
     padding-left: 0px
     padding-right: 0px
+    position: relative
     
 .sidebar
     padding: $space
@@ -58,3 +59,39 @@ $sm-width: 768px
         font-size: 1em
         font-weight: bold
         font-family: 'Monaco', 'monospace'
+
+.timeline-container
+    z-index: 9999
+    position: absolute
+    bottom: 0px
+    width: 100%
+    padding: $space
+    .timeline 
+        position: relative
+        // background-color: rgba(#333333, 0.8)
+        margin: $space/2
+        list-style: none 
+        display: flex
+        font-size: 0.8em
+        margin: 0px
+        $text-color: #aaaaaa
+        li 
+            position: relative
+            z-index: 1
+            color: $text-color
+            flex: 1
+            text-align: center
+            &:not(:last-child)
+                border-right: 1px solid $text-color
+            &.weekend 
+                color: lighten($text-color, 30%)
+        .timeline-cursor
+            position: absolute
+            z-index: 0
+            width: 0px
+            height: 1.5em
+            background-color: rgba(#eeeeee, 0.5)
+            &.active
+                transition-delay: 4s
+                width: 100%
+

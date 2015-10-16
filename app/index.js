@@ -36,6 +36,29 @@ function init(){
 
     const datesContainer = document.querySelector('.dates')
     datesContainer.innerHTML = `Week of ${startDate.split(' ')[0]} to ${endDate.split(' ')[0]}.`
+
+    drawTimeline()
+}
+
+function drawTimeline(){
+    const days = "Sun Mon Tue Wed Thu Fri Sat".split(' ')
+    const months = "Jan Feb Mar Apr May Jun Jul Aug Sept Oct Nov Dec".split(' ')
+    const timelineElem = document.querySelector('.timeline')
+    const start = new Date(Date.parse(startDate))
+    const end = new Date(Date.parse(endDate))
+    let curr = start
+    while (curr <= end){
+        let d = document.createElement('li')
+        let f = `${days[curr.getDay()]}, ${months[curr.getMonth()]} ${curr.getDate()}`
+        d.innerHTML = f
+
+        // if weekend
+        if(curr.getDay() == 0 || curr.getDay() == 6){
+            d.className = 'weekend'
+        }
+        timelineElem.appendChild(d)
+        curr.setDate(curr.getDate() + 1)
+    }
 }
 
 function initMapSize(){
@@ -55,8 +78,13 @@ function initBtnCallbacks(){
     
     startAnimationElem.onclick = (e) => {
         if(e) e.preventDefault()
-        map.heat({start: startDate, 
+        const time = map.heat({start: startDate, 
             end: endDate}, updateHUDTime)
+
+        const cursor = document.querySelector('.timeline-cursor')
+        cursor.style.transitionDelay = "2s"
+        cursor.style.transition = `width ${time/1000}s linear`
+        cursor.className += ' active'
     }
 
     // responsive toggle stuff
@@ -80,7 +108,7 @@ function initBtnCallbacks(){
     }
 
     // dev
-    startAnimationElem.onclick()
+    // startAnimationElem.onclick()
 }
 
 // show/hide subway lines

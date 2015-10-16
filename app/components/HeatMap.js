@@ -30,7 +30,7 @@ export default class HeatMap extends SubwayMap{
         const start = new Date(Date.parse(options.start))
         const end = new Date(Date.parse(options.end))
         const day = new Date(start)
-        let timeout = 1000
+        let timeout = 0
         let timeFrame = this.dayFrame
         while(day <= end){
             const yr = `${day.getFullYear()}`
@@ -47,9 +47,10 @@ export default class HeatMap extends SubwayMap{
             }, timeout)
 
             timeout += timeFrame
-            // day = next day
             day.setDate(day.getDate() + 1)
         }
+
+        return timeout + timeFrame
     }
 
     getRadius(volume){
