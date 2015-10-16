@@ -62,11 +62,10 @@ function initStartAnimationBtnCallbacks(startDate, endDate){
             end: endDate})
 
         intervalPromises = intervalPromises.map(p => {
-            p.then(datetime => {
-                ui.updateHUDTime(datetime)
-                ui.updateTimeline(datetime)
-                console.log(Date.parse(datetime),Date.parse(endDate))
-                if( Date.parse(datetime) >= Date.parse(endDate) ){
+            p.then(data => {
+                ui.updateHUDTime(data.datetime)
+                ui.updateTimeline(data.datetime, data.interval, data.whole)
+                if( Date.parse(data.datetime) >= Date.parse(endDate) ){
                     startAnimationElem.disabled = false
                 }
             })

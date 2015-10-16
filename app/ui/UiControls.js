@@ -21,11 +21,19 @@ export default {
         datetimeDisplayElem.innerHTML   = datetime.toString()
     },
 
-    updateTimeline(datetime){
+    updateTimeline(datetime, interval, whole){
         let id = this.getIdFromDate(datetime)
         const elem = document.getElementById(id)
+        const elemWidth = elem.clientWidth
 
-        return
+        const cursor = document.querySelector('.timeline-cursor')
+        cursor.style.transition = `width ${interval/1000}s` 
+
+        let w = (cursor.clientWidth + elemWidth*(interval/whole)) 
+        console.log(w, interval/whole, elemWidth)
+
+        cursor.style.width = w + 'px'
+
     },
 
     drawTimeline(startDate, endDate){

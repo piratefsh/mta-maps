@@ -170,10 +170,10 @@ export default class HeatMap extends SubwayMap{
                     setTimeout(()=>{
                         this.updateHeatLayer(sizes[time], counter, frameLen)
                         const dt = new Date(Date.parse(`${date} ${time}`))
-                        resolve(dt)
+                        resolve({datetime: dt, interval: this.timeFrame, whole: this.dayFrame})
                     }, counter)
                 })
-                
+
                 promises.push(p)
                 counter += frameLen
             }
