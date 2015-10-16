@@ -30,8 +30,9 @@ export default class HeatMap extends SubwayMap{
         const start = new Date(Date.parse(options.start))
         const end = new Date(Date.parse(options.end))
         const day = new Date(start)
-        let timeout = 1000
+        let timeout = 0
         let timeFrame = this.dayFrame
+        let promises = []
         while(day <= end){
             const yr = `${day.getFullYear()}`
             let mo = `${day.getMonth() + 1}`
@@ -41,15 +42,17 @@ export default class HeatMap extends SubwayMap{
             da = da.length == 1? `0${da}` : da
 
             const formattedDate = `${yr}-${mo}-${da}`
-            setTimeout(()=> {
-                this.createHeatLayer(formattedDate, 'exits', onDoneInterval)
-                this.createHeatLayer(formattedDate, 'entries', onDoneInterval)
-            }, timeout)
+
+            const pEntries = this.createHeatLayer(formattedDate, 'exits', timeout)
+            const pExits = this.createHeatLayer(formattedDate, 'entries', timeout)
+
+            Array.prototype.push.apply(promises, pEntries)
+            Array.prototype.push.apply(promises, pExits)
 
             timeout += timeFrame
-            // day = next day
             day.setDate(day.getDate() + 1)
         }
+        return promises
     }
 
     getRadius(volume){
@@ -150,25 +153,32 @@ export default class HeatMap extends SubwayMap{
 
     // for each interval = for each day, for each time 
         // make feature layers 
-    createHeatLayer(date, which, onDone){
+    createHeatLayer(date, which, timeout){
         const sizes = this.generateHeatSizes(date, which)
 
         let frameLen = this.timeFrame
-        let counter = frameLen
+        let counter = frameLen + timeout
+
+        let promises = []
 
         for(let time in sizes){
             if(Object.keys(this.layers[which]).length < 1){
                 this.createHeatLayerInit(sizes[time], which)
             }
             else{
-                setTimeout(()=>{
-                    this.updateHeatLayer(sizes[time], counter, frameLen)
-                    const dt = new Date(Date.parse(`${date} ${time}`))
-                    onDone(dt)
-                }, counter)
+                var p = new Promise((resolve, reject) => {
+                    setTimeout(()=>{
+                        this.updateHeatLayer(sizes[time], counter, frameLen)
+                        const dt = new Date(Date.parse(`${date} ${time}`))
+                        resolve({datetime: dt, interval: this.timeFrame, whole: this.dayFrame})
+                    }, counter)
+                })
+
+                promises.push(p)
                 counter += frameLen
             }
         }
+        return promises
     }
 
     createHeatLayerInit(sizes, which){

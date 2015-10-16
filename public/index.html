@@ -10,7 +10,9 @@
         <div class="col-sm-3 col-sidebar">
             <div class='sidebar'>
                 <h2 class='title'>NYC Subway Traffic</h2>
-                <p>Entrance and exit traffic at each MTA station over time</p>
+                <p>Entrance and exit traffic at each MTA station over time. <span class='dates'></span></p>
+
+                <p><small>Made by <a href='https://twitter.com/piratefsh' target='_blank'>@piratefsh</a> at <a href='https://www.recurse.com' target='_blank'>Recurse Center</a></small></p>
                 <form id='animation-controls'>
                     <fieldset>
                         <button id='start-animation' class='btn btn-success'>Start</button> 
@@ -34,8 +36,6 @@
                         </fieldset>
                     </form>
                 </div>
-
-
             </div>
         </div>
         <div class="col-sm-9 col-main">
@@ -44,6 +44,12 @@
             </div>
             <div id="map-container">
                 <div id='map' class='map'></div>
+            </div>
+            <div class="timeline-container">
+
+                <ul class="timeline">
+                <li class="timeline-cursor"></li>
+                </ul>
             </div>
         </div>
     </div>
