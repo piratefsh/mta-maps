@@ -3,7 +3,7 @@
 A weeks worth of entrances and exits for every station on the NYC Subway system visualized on a map. Filter via lines and zoom in to see station names. 
 
 ## Try it out
-[Over here!](piratefsh.github.io/mta-maps/public)
+[Over here!](http://piratefsh.github.io/mta-maps/public)
 
 ## Where is this data from?
 [Turnstile data](web.mta.info/developers/turnstile.html) taken from the MTA. Station location processed from [chriswhong/nycturnstiles](https://github.com/chriswhong/nycturnstiles), with the new added 34th St Hudson Yd station.
