@@ -433,11 +433,7 @@
 .map-tooltip .close,
 .mapbox-icon {
   opacity: .75;
-<<<<<<< HEAD
   background-image:url(/mta-maps/public/46e25057f75f6d45c30cd53b1b2996fc.png);
-=======
-  background-image:url(/46e25057f75f6d45c30cd53b1b2996fc.png);
->>>>>>> master
   background-repeat:no-repeat;
   background-size:26px 260px;
   }
@@ -448,11 +444,7 @@
   .leaflet-container.dark .leaflet-control-layers-toggle,
   .leaflet-container.dark .mapbox-icon {
     opacity: 1;
-<<<<<<< HEAD
     background-image:url(/mta-maps/public/ba1233d4024a58ab784655a844263f96.png);
-=======
-    background-image:url(/ba1233d4024a58ab784655a844263f96.png);
->>>>>>> master
     background-size:26px 260px;
     }
   .leaflet-bar .leaflet-control-zoom-in                 { background-position:0 0; }
@@ -928,13 +920,8 @@
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-<<<<<<< HEAD
   src: url(/mta-maps/public/45c73723862c6fc5eb3d6961db2d71fb.eot);
   src: url(/mta-maps/public/45c73723862c6fc5eb3d6961db2d71fb.eot?#iefix&v=4.4.0) format("embedded-opentype"), url(/mta-maps/public/4b5a84aaf1c9485e060c503a0ff8cadb.woff2) format("woff2"), url(/mta-maps/public/dfb02f8f6d0cedc009ee5887cc68f1f3.woff) format("woff"), url(/mta-maps/public/7c87870ab40d63cfb8870c1f183f9939.ttf) format("truetype"), url(/mta-maps/public/76a4f23c6be74fd309e0d0fd2c27a5de.svg#fontawesomeregular) format("svg");
-=======
-  src: url(/45c73723862c6fc5eb3d6961db2d71fb.eot);
-  src: url(/45c73723862c6fc5eb3d6961db2d71fb.eot?#iefix&v=4.4.0) format("embedded-opentype"), url(/4b5a84aaf1c9485e060c503a0ff8cadb.woff2) format("woff2"), url(/dfb02f8f6d0cedc009ee5887cc68f1f3.woff) format("woff"), url(/7c87870ab40d63cfb8870c1f183f9939.ttf) format("truetype"), url(/76a4f23c6be74fd309e0d0fd2c27a5de.svg#fontawesomeregular) format("svg");
->>>>>>> master
   font-weight: normal;
   font-style: normal; }
 
@@ -5666,6 +5653,17 @@ input[type="button"].btn-block {
   margin-right: 4px;
   margin-bottom: 4px; }
 
+.legend {
+  margin-bottom: 20px; }
+  .legend .heat-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle; }
+  .legend label {
+    vertical-align: middle;
+    margin-right: 10px; }
+
 .heat-icon {
   border-radius: 50%;
   min-width: 2px;
@@ -5707,26 +5705,16 @@ input[type="button"].btn-block {
   z-index: 9; }
 
 .control-fit-markers {
-<<<<<<< HEAD
   width: 28px;
   height: 28px;
   border: 1px solid #999999;
-=======
-  width: 26px;
-  height: 26px;
-  border: 1px solid #dddddd;
->>>>>>> master
   background-color: #fefefe;
   cursor: auto;
   border-radius: 3px;
   margin-left: 10px;
   vertical-align: middle;
   text-align: center;
-<<<<<<< HEAD
   padding: 3px; }
-=======
-  padding: 2px; }
->>>>>>> master
   .control-fit-markers a {
     color: #222222; }
     .control-fit-markers a:hover, .control-fit-markers a:focus, .control-fit-markers a:active {
